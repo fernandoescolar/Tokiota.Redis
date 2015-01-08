@@ -57,6 +57,20 @@ if (!redis.Keys.Exists("my:key:2")
 Console.WriteLine(redis.GetString("my:key:2"));
 ```
 <p>Currently all the official strings commands (http://redis.io/commands/#string) are working.</p>
+<h3>Hashes commands</h3>
+<p>Not implemented...</p>
+<h3>Lists commands</h3>
+<p>Not implemented...</p>
+<h3>Sets commands</h3>
+<p>Not implemented...</p>
+<h3>Sorted Sets commands</h3>
+<p>Not implemented...</p>
+<h3>Transactions commands</h3>
+<p>Not implemented...</p>
+<h3>Scripting commands</h3>
+<p>Not implemented...</p>
+<h3>Pub/Sub commands</h3>
+<p>Not implemented...</p>
 
 <h2>Cache demo</h2>
 ```csharp
