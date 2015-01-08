@@ -1,3 +1,98 @@
 # Tokiota.Redis
-A basic redis client for .net
+A basic redis client for .net<br/>
 based on https://github.com/migueldeicaza/redis-sharp
+<h2>Usage</h2>
+<p>If you want to use this redis library you should instantiate a IRedisClient object.</p>
+<p>For example:</p>
+```csharp
+var redis = new RedisClient("my.redis.cache.windows.net", 6380, "#password#");
+// do something
+```
+<p>Or using the client pool:</p>
+```csharp
+IRedisClientFactory factory = new RedisClientFactory("my.redis.cache.windows.net", 6380, "#password#");
+using (var redis = factory.GetCurrent())
+{
+   // do something
+}
+```
+<h3>Connection commands</h3>
+<p>You can access to the 'connection' commands using the Connection redis client property:</p>
+```csharp
+if (redis.Connection.Ping()
+{
+  redis.Connection.Echo("selecting db 2");
+  redis.Connection.Select(2);
+}
+```
+<p>Currently all the official connection commands (http://redis.io/commands/#connection) are working.</p>
+<h3>Keys commands</h3>
+<p>You can access to the 'keys' commands using the Keys redis client property:</p>
+```csharp
+if (redis.Keys.Exists("my:key:1")
+{
+  redis.Keys.Del("my:key:1");
+}
+
+if (redis.Keys.Exists("my:key:2")
+{
+  redis.Keys.Expire("my:key:2", 120 /*seconds*/);
+}
+```
+<p>Currently all the official keys commands (http://redis.io/commands/#generic) are working, except SORT and SCAN.</p>
+<h3>Strings commands</h3>
+<p>You can access to the 'strings' commands using the Strings redis client property:</p>
+```csharp
+if (redis.Keys.Exists("my:key:1")
+{
+  redis.Strings.Incr("my:key:1");
+}
+
+if (!redis.Keys.Exists("my:key:2")
+{
+  redis.Strings.Set("my:key:2", "hi redis!");
+}
+
+Console.WriteLine(redis.GetString("my:key:2"));
+```
+<p>Currently all the official strings commands (http://redis.io/commands/#string) are working.</p>
+
+<h2>Cache demo</h2>
+```csharp
+public class RedisCache
+{
+  private static readonly IRedisClientFactory factory = new RedisClientFactory("my.redis.cache.windows.net", 6380, "#password#");
+  
+  public T Get<T>(string key)
+  {
+      using (var redis = factory.GetCurrent())
+      {
+          if (typeof(T) == typeof(string)) return (T)(object)redis.Strings.GetString(key);
+          if (typeof(T) == typeof(byte[])) return (T)(object)redis.Strings.Get(key);
+
+          var data = redis.Strings.Get(key);
+          return Deserialize<T>(data);
+      }
+  }
+  
+  public void Set<T>(string key, T value, TimeSpan? expiration = null)
+  {
+      using (var redis = factory.GetCurrent())
+      {
+          byte[] bytes = null;
+          if (typeof(T) == typeof(string)) bytes = value.ToString().ToByteArray();
+          if (typeof(T) == typeof(byte[])) bytes = (byte[])(object)value;
+          if (bytes == null) bytes = Serialize<T>(value);
+
+          if (expiration.HasValue)
+              redis.Strings.Set(key, bytes, (int)expiration.Value.TotalSeconds);
+          else
+              redis.Strings.Set(key, bytes);
+      }
+  }
+  
+  private static byte[] Serialize<T>(T value);
+  
+  private static T Deserialize<T>(byte[] value);
+}
+```
