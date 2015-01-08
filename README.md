@@ -54,7 +54,7 @@ if (!redis.Keys.Exists("my:key:2")
   redis.Strings.Set("my:key:2", "hi redis!");
 }
 
-Console.WriteLine(redis.GetString("my:key:2"));
+Console.WriteLine(redis.Strings.GetString("my:key:2"));
 ```
 <p>Currently all the official strings commands (http://redis.io/commands/#string) are working.</p>
 <h3>Hashes commands</h3>
