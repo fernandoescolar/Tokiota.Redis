@@ -1,5 +1,6 @@
 # Tokiota.Redis
 A basic redis client for .net<br/>
+Version: Alpha-WIP (not ready for production environments)<br/>
 based on https://github.com/migueldeicaza/redis-sharp
 <h2>Usage</h2>
 <p>If you want to use this redis library you should instantiate a IRedisClient object.</p>
