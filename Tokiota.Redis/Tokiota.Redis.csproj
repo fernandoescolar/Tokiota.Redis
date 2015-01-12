@@ -32,11 +32,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IRedisClient.cs" />
@@ -50,7 +46,13 @@
     <Compile Include="Protocol\Commands.cs" />
     <Compile Include="Protocol\ComponentBase.cs" />
     <Compile Include="Protocol\ConnecionComponent.cs" />
+    <Compile Include="Protocol\HashesComponent.cs" />
+    <Compile Include="IRedisHashesCommands.cs" />
+    <Compile Include="IRedisListsCommands.cs" />
+    <Compile Include="IRedisSetsCommands.cs" />
     <Compile Include="Protocol\KeysComponent.cs" />
+    <Compile Include="Protocol\ListsComponent.cs" />
+    <Compile Include="Protocol\SetsComponent.cs" />
     <Compile Include="Protocol\StringsComponent.cs" />
     <Compile Include="RedisClient.cs" />
     <Compile Include="RedisClientFactory.cs" />

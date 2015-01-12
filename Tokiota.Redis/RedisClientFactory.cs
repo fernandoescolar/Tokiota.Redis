@@ -5,7 +5,7 @@ using Tokiota.Redis.Utilities;
 
 namespace Tokiota.Redis
 {
-    public class RedisClientFactory : Tokiota.Redis.IRedisClientFactory
+    public class RedisClientFactory : IRedisClientFactory
     {
         private const int DefaultNumberOfClients = 3;
 

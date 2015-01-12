@@ -35,7 +35,15 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.Decr, key.ToByteArray());
         }
 
-        public long DecrBy(string key, int count)
+        public int DecrBy(string key, int count)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            return this.Connection.SendExpectInt(Commands.DecrBy, key.ToByteArray(), count.ToByteArray());
+        }
+
+        public long DecrBy(string key, long count)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
@@ -105,12 +113,12 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.Incr, key.ToByteArray());
         }
 
-        public long IncrBy(string key, int count)
+        public int IncrBy(string key, int count)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.IncrBy, key.ToByteArray(), count.ToByteArray());
+            return this.Connection.SendExpectInt(Commands.IncrBy, key.ToByteArray(), count.ToByteArray());
         }
 
         public long IncrBy(string key, long count)

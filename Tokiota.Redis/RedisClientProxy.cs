@@ -31,6 +31,21 @@ namespace Tokiota.Redis
             get { return this.innerClient.Strings; }
         }
 
+        public IRedisHashesCommands Hashes
+        {
+            get { return this.innerClient.Hashes; }
+        }
+
+        public IRedisListsCommands Lists
+        {
+            get { return this.innerClient.Lists; }
+        }
+
+        public IRedisSetsCommands Sets
+        {
+            get { return this.innerClient.Sets; }
+        }
+
         public void Dispose()
         {
             if (this.onDispose != null)

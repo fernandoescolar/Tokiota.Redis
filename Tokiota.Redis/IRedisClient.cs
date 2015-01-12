@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 
 namespace Tokiota.Redis
 {
@@ -9,5 +10,11 @@ namespace Tokiota.Redis
         IRedisKeysCommands Keys { get; }
 
         IRedisStringsCommands Strings { get; }
+
+        IRedisHashesCommands Hashes { get; }
+
+        IRedisListsCommands Lists { get; }
+
+        IRedisSetsCommands Sets { get; }
     }
 }
