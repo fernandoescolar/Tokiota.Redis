@@ -17,11 +17,12 @@ namespace Tokiota.Redis.Console.Net
 
         private readonly ByteBuffer outBuffer = new ByteBuffer();
         private readonly ByteBuffer inBuffer = new ByteBuffer();
-        private ManualResetEvent waiter = new ManualResetEvent(false); 
 
         private Socket socket;
         private SslStream sslStream;
         private BufferedStream bstream;
+
+        private int indentCount = 0;
 
         public RedisConnection(string host, int port, int sendTimeout, bool useSsl)
         {
@@ -55,9 +56,8 @@ namespace Tokiota.Redis.Console.Net
 
         public bool SendCommand(params string[] args)
         {
-            this.waiter.Reset();
             var result = this.SendCommand(args.ToByteArrays());
-            this.waiter.WaitOne();
+            if (result) this.Receive();
             return result;
         }
 
@@ -87,8 +87,6 @@ namespace Tokiota.Redis.Console.Net
                 this.socket.Close();
                 this.outBuffer.Dispose();
                 this.socket = null;
-                this.waiter.Dispose();
-                this.waiter = null;
             }
         }
 
@@ -118,7 +116,6 @@ namespace Tokiota.Redis.Console.Net
             }
 
             this.bstream = new BufferedStream(stream, BufferSize);
-            this.BeginReceive();
             this.OnConnecting();
         }
 
@@ -157,32 +154,66 @@ namespace Tokiota.Redis.Console.Net
             return true;
         }
 
-        private void BeginReceive()
-        { 
-            var buffer = new byte[BufferSize];
-            this.bstream.BeginRead(buffer, 0, buffer.Length, EndReceive, buffer);
-        }
-
-        private void EndReceive(IAsyncResult ar)
+        private void Receive()
         {
-            var buffer = ar.AsyncState as byte[];
-            if (buffer != null)
+            this.ReceiveBuffer();
+            if (this.inBuffer.Length > 0)
             {
-                var read = 0;
-                try
+                this.inBuffer.StartRead();
+                var line = string.Empty;
+                if((line = this.inBuffer.ReadString()) != null)
                 {
-                    read = this.bstream.EndRead(ar);
-                    var result = Encoding.UTF8.GetString(buffer, 0, read);
-                    this.OnMessageReceive(result);
-                    
-                    if (this.waiter != null) this.waiter.Set();
-                }
-                catch (IOException)
-                {
+                    var message = this.ParseLine(line);
+                    this.OnMessageReceive(message);
                 }
             }
+        }
 
-            this.BeginReceive();
+        private void ReceiveBuffer()
+        {
+            var buffer = new byte[BufferSize];
+            var read = 0;
+            this.inBuffer.Clear();
+            while((read = this.bstream.Read(buffer, 0, buffer.Length)) > 0)
+            {
+                this.inBuffer.Write(buffer, 0, read);
+
+                if (read < buffer.Length) break;
+            }
+        }
+
+        private string ParseLine(string line)
+        {
+            var sb = new StringBuilder();
+            if (line.StartsWith("*"))
+            {
+                var size = int.Parse(line.Substring(1));
+                sb.AppendLine("Array[" + size + "]");
+                for (int i = 0; i < size; i++)
+                {
+                    this.indentCount++;
+                    sb.AppendLine(new String(' ', this.indentCount * 2) + (i+1) + ") " + this.ParseLine(this.inBuffer.ReadString()));
+                    this.indentCount--;
+                }
+            }
+            else if (line.StartsWith("$-1"))
+            {
+                sb.Append("(nil)");
+            }
+            else if (line.StartsWith("$"))
+            {
+                sb.Append(this.ParseLine(this.inBuffer.ReadString()));
+            }
+            else if (line.StartsWith(":"))
+            {
+                sb.Append(line.Substring(1));
+            }
+            else
+            {
+                sb.Append(line);
+            }
+
+            return sb.ToString();
         }
 
         private void OnConnecting()

@@ -46,7 +46,16 @@ namespace Tokiota.Redis.Console
 
         private static void OnMessageReceived(object sender, RedisMessageReceiveEventArgs args)
         {
+            var color = System.Console.ForegroundColor;
+
+            if (args.Message.StartsWith("-")) System.Console.ForegroundColor = ConsoleColor.Red;
+            else if (args.Message.StartsWith("(nil)")) System.Console.ForegroundColor = ConsoleColor.Yellow;
+            else if (args.Message.StartsWith("+")) System.Console.ForegroundColor = ConsoleColor.Green;
+            else System.Console.ForegroundColor = ConsoleColor.White;
+
             System.Console.WriteLine(args.Message);
+
+            System.Console.ForegroundColor = color;
         }
     }
 }

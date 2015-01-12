@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 
 namespace Tokiota.Redis.Utilities
 {
@@ -58,6 +59,26 @@ namespace Tokiota.Redis.Utilities
             }
 
             return this.reader.Read(source, offset, length);
+        }
+
+        public string ReadString()
+        { 
+            var sb = new StringBuilder();
+            int c;
+
+            while ((c = this.reader.ReadByte()) != -1)
+            {
+                if (c == '\r')
+                    continue;
+                if (c == '\n')
+                    break;
+                if (this.buffer.Position > this.length)
+                    break;
+
+                sb.Append((char)c);
+            }
+
+            return sb.ToString();
         }
 
         public void Dispose()
