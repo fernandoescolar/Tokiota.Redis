@@ -58,11 +58,11 @@ Console.WriteLine(redis.Strings.GetString("my:key:2"));
 ```
 <p>Currently all the official strings commands (http://redis.io/commands/#string) are working.</p>
 <h3>Hashes commands</h3>
-<p>Currently all the official keys commands (http://redis.io/commands/#generic) are working, except HSCAN.</p>
+<p>Currently all the official keys commands (http://redis.io/commands/#hash) are working, except HSCAN.</p>
 <h3>Lists commands</h3>
-<p>Currently all the official keys commands (http://redis.io/commands/#generic) are working.</p>
+<p>Currently all the official keys commands (http://redis.io/commands/#list) are working.</p>
 <h3>Sets commands</h3>
-<p>Currently all the official keys commands (http://redis.io/commands/#generic) are working, except SSCAN.</p>
+<p>Currently all the official keys commands (http://redis.io/commands/#set) are working, except SSCAN.</p>
 <h3>Sorted Sets commands</h3>
 <p>Not implemented...</p>
 <h3>Transactions commands</h3>
