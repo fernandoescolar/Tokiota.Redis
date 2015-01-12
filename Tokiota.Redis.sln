@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tokiota.Redis", "Tokiota.Redis\Tokiota.Redis.csproj", "{F8BBA61F-2B6D-4E72-A478-A062DDFD5626}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tokiota.Redis.Console", "Tokiota.Redis.Console\Tokiota.Redis.Console.csproj", "{6A1DE36F-599E-4F0D-8B6C-42E392504403}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F8BBA61F-2B6D-4E72-A478-A062DDFD5626}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8BBA61F-2B6D-4E72-A478-A062DDFD5626}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8BBA61F-2B6D-4E72-A478-A062DDFD5626}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A1DE36F-599E-4F0D-8B6C-42E392504403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A1DE36F-599E-4F0D-8B6C-42E392504403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A1DE36F-599E-4F0D-8B6C-42E392504403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A1DE36F-599E-4F0D-8B6C-42E392504403}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

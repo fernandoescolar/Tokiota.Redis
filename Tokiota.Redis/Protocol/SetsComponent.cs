@@ -55,7 +55,6 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.SAdd.Merge(setId.ToByteArray().Merge(values)));
         }
 
-
         public long SCard(string setId)
         {
             if (setId == null)
@@ -63,7 +62,6 @@ namespace Tokiota.Redis.Protocol
 
             return this.Connection.SendExpectLong(Commands.SCard, setId.ToByteArray());
         }
-
 
         public byte[][] SDiff(string fromSetId, params string[] withSetIds)
         {
@@ -126,7 +124,6 @@ namespace Tokiota.Redis.Protocol
 
             this.Connection.SendExpectSuccess(Commands.SInterStore.Merge(intoSetId.ToByteArray().Merge(setIds)));
         }
-
 
         public long SIsMember(string setId, byte[] value)
         {

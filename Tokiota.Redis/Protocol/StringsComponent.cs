@@ -173,7 +173,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentException("values");
 
-            this.Connection.SendExpectSuccess(Commands.MSet.Merge(keys, values));
+            this.Connection.SendExpectSuccess(Commands.MSet.Combine(keys, values));
         }
 
         public void MSet(string[] keys, string[] values)
@@ -190,7 +190,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentException("values");
 
-            this.Connection.SendExpectSuccess(Commands.MSet.Merge(keys.ToByteArrays(), values.ToByteArrays()));
+            this.Connection.SendExpectSuccess(Commands.MSet.Combine(keys.ToByteArrays(), values.ToByteArrays()));
         }
 
         public bool MSetNx(byte[][] keys, byte[][] values)
@@ -207,7 +207,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentException("values");
 
-            return this.Connection.SendExpectInt(Commands.MSet.Merge(keys, values)) == 1;
+            return this.Connection.SendExpectInt(Commands.MSet.Combine(keys, values)) == 1;
         }
 
         public bool MSetNx(string[] keys, string[] values)
@@ -224,7 +224,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentException("values");
 
-            return this.Connection.SendExpectInt(Commands.MSet.Merge(keys.ToByteArrays(), values.ToByteArrays())) == 1;
+            return this.Connection.SendExpectInt(Commands.MSet.Combine(keys.ToByteArrays(), values.ToByteArrays())) == 1;
         }
 
         public void PSetEx(string key, long expireInMs, byte[] value)

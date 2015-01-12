@@ -67,16 +67,20 @@ namespace Tokiota.Redis.Utilities
             return numArray;
         }
 
-        public static byte[][] Merge(this byte[] cmd, byte[][] args1, byte[][] args2)
+        public static byte[][] Combine(this byte[] cmd, byte[][] keys, byte[][] values)
         {
-            var numArray = new byte[1 + args1.Length + args2.Length][];
-            int index1;
+            if (keys.Length != values.Length)
+                throw new ArgumentException("The lenght of 'keys' and 'values' should be the same");
 
-            numArray[0] = cmd;
-            for (index1 = 0; index1 < args1.Length; ++index1)
-                numArray[index1 + 1] = args1[index1];
-            for (int index2 = 0; index2 < args2.Length; ++index2)
-                numArray[index1 + index2 + 1] = args2[index2];
+            var numArray = new byte[1 + keys.Length + values.Length][];
+            var index = 0;
+            numArray[index++] = cmd;
+            for (int i = 0; i < keys.Length; ++i)
+            {
+                numArray[index++] = keys[i];
+                numArray[index++] = values[i];
+            }
+                
 
             return numArray;
         }

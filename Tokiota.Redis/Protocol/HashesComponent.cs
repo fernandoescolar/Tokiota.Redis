@@ -215,7 +215,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentNullException("values");
 
-            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Merge(keys, values)));
+            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Combine(keys, values)));
         }
 
         public void HMSet(string hashId, string[] keys, byte[][] values)
@@ -231,7 +231,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentNullException("values");
 
-            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Merge(keys.ToByteArrays(), values)));
+            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Combine(keys.ToByteArrays(), values)));
         }
 
         public void HMSet(string hashId, string[] keys, string[] values)
@@ -247,7 +247,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentNullException("values");
 
-            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Merge(keys.ToByteArrays(), values.ToByteArrays())));
+            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Combine(keys.ToByteArrays(), values.ToByteArrays())));
         }
 
         public long HSet(string hashId, byte[] key, byte[] value)
