@@ -121,3 +121,15 @@ public class RedisCache
     <add key="UseSsl" value="true" />
   </appSettings>
 ```
+<p>Them execute the Tokiota.Redis.Console.exe and set your credentials if you need it:</p>
+```
+> AUTH #mypassword#
++ OK
+> SET my:key:1 hello
++ OK
+> GET my:set:1
+hello
+> QUIT
++ OK
+Press enter to exit...
+```
