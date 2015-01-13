@@ -10,29 +10,21 @@ namespace Tokiota.Redis.Console
         {
             try
             {
-                var host = ConfigurationManager.AppSettings["Host"];
-                var port = int.Parse(ConfigurationManager.AppSettings["Port"]);
-                var useSsl = bool.Parse(ConfigurationManager.AppSettings["UseSsl"]);
+                var host = GetArgumentValue("Host", "localhost", args, 0);
+                var port = int.Parse(GetArgumentValue("Port", "6379", args, 1));
+                var password = GetArgumentValue("Password", string.Empty, args, 2);
+                var useSsl = port != 6379;
 
-                using(var redis = new RedisConnection(host, port, 30, useSsl))
+                using (var redis = new RedisConnection(host, port, 30, useSsl))
                 {
                     redis.MessageReceived += OnMessageReceived;
-                    do {
-                        System.Console.Write("> ");
-                        var line = System.Console.ReadLine();
-                        if (!redis.SendCommand(CommandLineParser.Parse(line)))
-                        {
-                            System.Console.WriteLine("Error: could not send the command");
-                        }
-                        else 
-                        {
-                            if (line == "QUIT")
-                            {
-                                redis.MessageReceived -= OnMessageReceived;
-                                break;
-                            }
-                        }
-                    } while(redis.Connected);
+                    if (!string.IsNullOrEmpty(password))
+                    {
+                        AutoAuth(redis, password);
+                    }
+
+                    CommandLoop(redis);
+                    redis.MessageReceived -= OnMessageReceived;
                 }
             }
             catch (Exception ex)
@@ -42,6 +34,51 @@ namespace Tokiota.Redis.Console
 
             System.Console.WriteLine("Press enter to exit...");
             System.Console.ReadLine();
+        }
+
+        private static string GetArgumentValue(string name, string defaultValue, string[] args, int index)
+        {
+            if (args.Length > index)
+            {
+                return args[index];
+            }
+
+            if (!string.IsNullOrEmpty(ConfigurationManager.AppSettings[name]))
+            {
+                return ConfigurationManager.AppSettings[name];
+            }
+
+            return defaultValue;
+        }
+
+        private static void AutoAuth(IRedisConnection redis, string password)
+        {
+            System.Console.WriteLine("> AUTH ***********");
+            redis.SendCommand("AUTH", password);
+        }
+
+        private static void CommandLoop(IRedisConnection redis)
+        {
+            do
+            {
+                System.Console.Write("> ");
+                var line = System.Console.ReadLine();
+                if (string.IsNullOrEmpty(line))
+                {
+                    continue;
+                }
+                else if (!redis.SendCommand(CommandLineParser.Parse(line)))
+                {
+                    System.Console.WriteLine("Error: could not send the command");
+                }
+                else
+                {
+                    if (line == "QUIT")
+                    {
+                        break;
+                    }
+                }
+            } while (redis.Connected);
         }
 
         private static void OnMessageReceived(object sender, RedisMessageReceiveEventArgs args)
