@@ -17,7 +17,7 @@ namespace Tokiota.Redis.Console
                 {
                     block = !block;
                 }
-                else if (c == ' ')
+                else if (c == ' ' && !block)
                 {
                     result.Add(current);
                     current = string.Empty;
