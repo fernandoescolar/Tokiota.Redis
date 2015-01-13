@@ -1,7 +1,8 @@
 # Tokiota.Redis
 A basic redis client for .net<br/>
 Version: Alpha-WIP (not ready for production environments)<br/>
-based on https://github.com/migueldeicaza/redis-sharp
+based on https://github.com/migueldeicaza/redis-sharp<br/>
+To use the command prompt tool, go to <a href="#console">Tokiota.Redis.Console section bellow</a>.
 <h2>Usage</h2>
 <p>If you want to use this redis library you should instantiate a IRedisClient object.</p>
 <p>For example:</p>
@@ -110,4 +111,25 @@ public class RedisCache
   
   private static T Deserialize<T>(byte[] value);
 }
+```
+<h1 id="console">Tokiota.Redis.Console</h1>
+<p>To use the redis client console tool don't forget to change the connection values in the "Tokiota.Redis.Console.config" file:</p>
+```xml
+  <appSettings>
+    <add key="Host" value="tokiota.redis.cache.windows.net" />
+    <add key="Port" value="6380" />
+    <add key="UseSsl" value="true" />
+  </appSettings>
+```
+<p>Them execute the Tokiota.Redis.Console.exe and set your credentials if you need it:</p>
+```
+> AUTH #mypassword#
++ OK
+> SET my:key:1 hello
++ OK
+> GET my:set:1
+hello
+> QUIT
++ OK
+Press enter to exit...
 ```
