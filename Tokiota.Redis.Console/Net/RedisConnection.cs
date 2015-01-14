@@ -47,7 +47,7 @@ namespace Tokiota.Redis.Console.Net
         public event EventHandler Disconnecting;
 
         public event RedisMessageReceiveEventHandler MessageReceived;
-        
+
         public void Dispose()
         {
             this.Dispose(true);
@@ -56,9 +56,7 @@ namespace Tokiota.Redis.Console.Net
 
         public bool SendCommand(params string[] args)
         {
-            var result = this.SendCommand(args.ToByteArrays());
-            if (result) this.Receive();
-            return result;
+            return this.SendCommand(args.ToByteArrays());
         }
 
         public bool SendCommand(params byte[][] args)
@@ -87,6 +85,8 @@ namespace Tokiota.Redis.Console.Net
                 this.socket.Close();
                 this.outBuffer.Dispose();
                 this.socket = null;
+                this.bstream.Dispose();
+                this.bstream = null;
             }
         }
 
@@ -117,6 +117,7 @@ namespace Tokiota.Redis.Console.Net
 
             this.bstream = new BufferedStream(stream, BufferSize);
             this.OnConnecting();
+            this.BeginReceive();
         }
 
         private bool SendBuffer()
@@ -154,32 +155,48 @@ namespace Tokiota.Redis.Console.Net
             return true;
         }
 
-        private void Receive()
+        private void BeginReceive()
         {
-            this.ReceiveBuffer();
-            if (this.inBuffer.Length > 0)
+            var buffer = new byte[BufferSize];
+            if (this.bstream != null)
             {
-                this.inBuffer.StartRead();
-                var line = string.Empty;
-                if((line = this.inBuffer.ReadString()) != null)
-                {
-                    var message = this.ParseLine(line);
-                    this.OnMessageReceive(message);
-                }
+                this.bstream.BeginRead(buffer, 0, buffer.Length, EndReceive, buffer);
             }
         }
 
-        private void ReceiveBuffer()
+        private void EndReceive(IAsyncResult ar)
         {
-            var buffer = new byte[BufferSize];
-            var read = 0;
-            this.inBuffer.Clear();
-            while((read = this.bstream.Read(buffer, 0, buffer.Length)) > 0)
-            {
-                this.inBuffer.Write(buffer, 0, read);
+            if (this.bstream == null) return;
 
-                if (read < buffer.Length) break;
+            var buffer = ar.AsyncState as byte[];
+            if (buffer != null)
+            {
+                try
+                {
+                    var read = this.bstream.EndRead(ar);
+                    this.inBuffer.Write(buffer, 0, read);
+
+                    if (read < buffer.Length)
+                    {
+                        if (this.inBuffer.Length > 0)
+                        {
+                            this.inBuffer.StartRead();
+                            var message = this.ParseLine(this.inBuffer.ReadString());
+                            this.OnMessageReceive(message);
+                            this.inBuffer.Clear();
+                        }
+                    }
+                    else
+                    {
+                        this.BeginReceive();
+                    }
+                }
+                catch (IOException)
+                {
+                }
             }
+
+            this.BeginReceive();
         }
 
         private string ParseLine(string line)
@@ -192,7 +209,7 @@ namespace Tokiota.Redis.Console.Net
                 for (int i = 0; i < size; i++)
                 {
                     this.indentCount++;
-                    sb.AppendLine(new String(' ', this.indentCount * 2) + (i+1) + ") " + this.ParseLine(this.inBuffer.ReadString()));
+                    sb.AppendLine(new String(' ', this.indentCount * 2) + (i + 1) + ") " + this.ParseLine(this.inBuffer.ReadString()));
                     this.indentCount--;
                 }
             }

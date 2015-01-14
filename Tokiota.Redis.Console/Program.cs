@@ -31,9 +31,6 @@ namespace Tokiota.Redis.Console
             {
                 System.Console.WriteLine("Error: " + ex.Message);
             }
-
-            System.Console.WriteLine("Press enter to exit...");
-            System.Console.ReadLine();
         }
 
         private static string GetArgumentValue(string name, string defaultValue, string[] args, int index)
@@ -61,7 +58,7 @@ namespace Tokiota.Redis.Console
         {
             do
             {
-                System.Console.Write("> ");
+                WritePrompt();
                 var line = System.Console.ReadLine();
                 if (string.IsNullOrEmpty(line))
                 {
@@ -71,18 +68,23 @@ namespace Tokiota.Redis.Console
                 {
                     System.Console.WriteLine("Error: could not send the command");
                 }
-                else
+                else if (line == "QUIT")
                 {
-                    if (line == "QUIT")
-                    {
-                        break;
-                    }
+                    break;
                 }
             } while (redis.Connected);
         }
 
+        private static void WritePrompt()
+        {
+            System.Console.Write("> ");
+        }
+
         private static void OnMessageReceived(object sender, RedisMessageReceiveEventArgs args)
         {
+            var rewritePrompt = System.Console.CursorLeft > 0;
+            System.Console.SetCursorPosition(0, System.Console.CursorTop);
+
             var color = System.Console.ForegroundColor;
 
             if (args.Message.StartsWith("-")) System.Console.ForegroundColor = ConsoleColor.Red;
@@ -93,6 +95,10 @@ namespace Tokiota.Redis.Console
             System.Console.WriteLine(args.Message);
 
             System.Console.ForegroundColor = color;
+            if (rewritePrompt)
+            {
+                WritePrompt();
+            }
         }
     }
 }
