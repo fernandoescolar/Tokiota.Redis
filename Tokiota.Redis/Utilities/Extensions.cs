@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Tokiota.Redis.Utilities
 {
-    internal static class Extensions
+    public static class Extensions
     {
         public static byte[] ToByteArray(this string str)
         {
