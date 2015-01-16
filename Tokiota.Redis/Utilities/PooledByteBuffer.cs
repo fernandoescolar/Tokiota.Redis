@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Tokiota.Redis.Utilities
 {
-    internal sealed class ByteBuffer : IDisposable
+    internal sealed class PooledByteBuffer : PooledObject
     {
         private const int DefaultBufferSize = 2 * 1024 * 1024; //2Mb
 
@@ -13,12 +13,12 @@ namespace Tokiota.Redis.Utilities
 
         private int length = 0;
 
-        public ByteBuffer()
+        public PooledByteBuffer()
             : this(DefaultBufferSize)
         {
         }
 
-        public ByteBuffer(int size)
+        public PooledByteBuffer(int size)
         {
             this.buffer = new MemoryStream(size);
             this.reader = new BinaryReader(this.buffer);
@@ -26,13 +26,7 @@ namespace Tokiota.Redis.Utilities
         }
 
         public int Length { get { return this.length; } }
-
-        public void Clear()
-        {
-            this.buffer.Position = 0;
-            this.length = 0;
-        }
-
+        
         public void Write(byte[] source)
         {
             this.Write(source, 0, source.Length);
@@ -60,9 +54,21 @@ namespace Tokiota.Redis.Utilities
             return this.reader.Read(source, offset, length);
         }
 
-        public void Dispose()
+        protected override void OnResetState()
         {
-            buffer.Dispose();
+            this.buffer.Position = 0;
+            this.length = 0;
+
+            base.OnResetState();
+        }
+
+        protected override void OnReleaseResources()
+        {
+            this.buffer.Dispose();
+            this.reader.Dispose();
+            this.writer.Dispose();
+
+            base.OnReleaseResources();
         }
     }
 }

@@ -1,12 +1,11 @@
 ﻿using System;
-using Tokiota.Redis.Net;
 using Tokiota.Redis.Utilities;
 
 namespace Tokiota.Redis.Protocol
 {
-    internal class KeysComponent : ComponentBase, IRedisKeysCommands
+    internal class KeysCommands : CommandsBase, IRedisKeysCommands
     {
-        public KeysComponent(IRedisConnection connection) : base(connection)
+        public KeysCommands(IRedisConnection connection) : base(connection)
         {
         }
 
@@ -15,10 +14,10 @@ namespace Tokiota.Redis.Protocol
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.Del, key.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.Del, key.ToByteArray()) == 1;
         }
 
-        public int Del(params string[] args)
+        public long Del(params string[] args)
         {
             if (args == null)
                 throw new ArgumentNullException("args");
@@ -32,7 +31,7 @@ namespace Tokiota.Redis.Protocol
                 cmds[index++] = arg.ToByteArray();
             }
 
-            return this.Connection.SendExpectInt(cmds);
+            return this.Connection.SendExpectLong(cmds);
         }
 
         public byte[] Dump(string key)
@@ -48,7 +47,7 @@ namespace Tokiota.Redis.Protocol
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.Exists, key.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.Exists, key.ToByteArray()) == 1;
         }
 
         public bool Expire(string key, int seconds)
@@ -56,7 +55,7 @@ namespace Tokiota.Redis.Protocol
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.Expire, key.ToByteArray(), seconds.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.Expire, key.ToByteArray(), seconds.ToByteArray()) == 1;
         }
 
         public bool ExpireAt(string key, int time)
@@ -64,7 +63,7 @@ namespace Tokiota.Redis.Protocol
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.ExpireAt, key.ToByteArray(), time.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.ExpireAt, key.ToByteArray(), time.ToByteArray()) == 1;
         }
 
         public byte[][] Keys(string pattern)
@@ -88,7 +87,7 @@ namespace Tokiota.Redis.Protocol
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.Move, key.ToByteArray(), db.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.Move, key.ToByteArray(), db.ToByteArray()) == 1;
         }
 
         public bool Persist(string key)
@@ -96,7 +95,7 @@ namespace Tokiota.Redis.Protocol
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.Persist, key.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.Persist, key.ToByteArray()) == 1;
         }
 
         public bool PExpire(string key, long ttlMs)
@@ -104,7 +103,7 @@ namespace Tokiota.Redis.Protocol
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.PExpire, key.ToByteArray(), ttlMs.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.PExpire, key.ToByteArray(), ttlMs.ToByteArray()) == 1;
         }
 
         public bool PExpireAt(string key, long unixTimeMs)
@@ -112,7 +111,7 @@ namespace Tokiota.Redis.Protocol
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.PExpireAt, key.ToByteArray(), unixTimeMs.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.PExpireAt, key.ToByteArray(), unixTimeMs.ToByteArray()) == 1;
         }
 
         public long PTtl(string key)
@@ -147,7 +146,7 @@ namespace Tokiota.Redis.Protocol
             if (newKeyname == null)
                 throw new ArgumentNullException("newKeyname");
 
-            return this.Connection.SendExpectInt(Commands.RenameNx, oldKeyname.ToByteArray(), newKeyname.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.RenameNx, oldKeyname.ToByteArray(), newKeyname.ToByteArray()) == 1;
         }
 
         public byte[] Restore(string key, long expireMs, byte[] dumpValue)

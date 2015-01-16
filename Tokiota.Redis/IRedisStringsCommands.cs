@@ -7,7 +7,7 @@ namespace Tokiota.Redis
         long Append(string key, byte[] value);
         long BitCount(string key);
         long Decr(string key);
-        int DecrBy(string key, int count);
+        long DecrBy(string key, int count);
         long DecrBy(string key, long count);
         byte[] Get(string key);
         long GetBit(string key, int offset);
@@ -15,7 +15,7 @@ namespace Tokiota.Redis
         string GetSet(string key, string value);
         string GetString(string key);
         long Incr(string key);
-        int IncrBy(string key, int count);
+        long IncrBy(string key, int count);
         long IncrBy(string key, long count);
         double IncrByFloat(string key, double incrBy);
         byte[][] MGet(params byte[][] keys);

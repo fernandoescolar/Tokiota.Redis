@@ -4,7 +4,7 @@ using Tokiota.Redis.Utilities;
 
 namespace Tokiota.Redis.Protocol
 {
-    internal class ListsComponent : ComponentBase, IRedisListsCommands
+    internal class ListsComponent : CommandsBase, IRedisListsCommands
     {
         public ListsComponent(IRedisConnection connection) : base(connection)
         {

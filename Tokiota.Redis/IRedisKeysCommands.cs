@@ -4,7 +4,7 @@ namespace Tokiota.Redis
 {
     public interface IRedisKeysCommands
     {
-        int Del(params string[] args);
+        long Del(params string[] args);
         bool Del(string key);
         byte[] Dump(string key);
         bool Exists(string key);

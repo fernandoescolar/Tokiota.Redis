@@ -5,9 +5,9 @@ using Tokiota.Redis.Utilities;
 
 namespace Tokiota.Redis.Protocol
 {
-    internal class SetsComponent : ComponentBase, IRedisSetsCommands
+    internal class SetsCommands : CommandsBase, IRedisSetsCommands
     {
-        public SetsComponent(IRedisConnection conneciton) : base(conneciton)
+        public SetsCommands(IRedisConnection conneciton) : base(conneciton)
         {
         }
 

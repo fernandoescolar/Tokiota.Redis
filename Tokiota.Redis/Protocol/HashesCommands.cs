@@ -4,9 +4,9 @@ using Tokiota.Redis.Utilities;
 
 namespace Tokiota.Redis.Protocol
 {
-    internal class HashesComponent : ComponentBase, IRedisHashesCommands
+    internal class HashesCommands : CommandsBase, IRedisHashesCommands
     {
-        public HashesComponent(IRedisConnection connection) : base(connection)
+        public HashesCommands(IRedisConnection connection) : base(connection)
         {
         }
 
@@ -112,14 +112,14 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectMultiData(Commands.HGetAll, hashId.ToByteArray());
         }
 
-        public int HIncrBy(string hashId, byte[] key, int incrementBy)
+        public long HIncrBy(string hashId, byte[] key, int incrementBy)
         {
             if (hashId == null)
                 throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.HIncrBy, hashId.ToByteArray(), key, incrementBy.ToByteArray());
+            return this.Connection.SendExpectLong(Commands.HIncrBy, hashId.ToByteArray(), key, incrementBy.ToByteArray());
         }
 
         public long HIncrBy(string hashId, byte[] key, long incrementBy)

@@ -4,9 +4,9 @@ using Tokiota.Redis.Utilities;
 
 namespace Tokiota.Redis.Protocol
 {
-    internal class StringsComponent : ComponentBase, IRedisStringsCommands
+    internal class StringsCommands : CommandsBase, IRedisStringsCommands
     {
-        public StringsComponent(IRedisConnection connection)
+        public StringsCommands(IRedisConnection connection)
             : base(connection)
         {
         }
@@ -35,12 +35,12 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.Decr, key.ToByteArray());
         }
 
-        public int DecrBy(string key, int count)
+        public long DecrBy(string key, int count)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.DecrBy, key.ToByteArray(), count.ToByteArray());
+            return this.Connection.SendExpectLong(Commands.DecrBy, key.ToByteArray(), count.ToByteArray());
         }
 
         public long DecrBy(string key, long count)
@@ -113,12 +113,12 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.Incr, key.ToByteArray());
         }
 
-        public int IncrBy(string key, int count)
+        public long IncrBy(string key, int count)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectInt(Commands.IncrBy, key.ToByteArray(), count.ToByteArray());
+            return this.Connection.SendExpectLong(Commands.IncrBy, key.ToByteArray(), count.ToByteArray());
         }
 
         public long IncrBy(string key, long count)
@@ -207,7 +207,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentException("values");
 
-            return this.Connection.SendExpectInt(Commands.MSet.Combine(keys, values)) == 1;
+            return this.Connection.SendExpectLong(Commands.MSet.Combine(keys, values)) == 1;
         }
 
         public bool MSetNx(string[] keys, string[] values)
@@ -224,7 +224,7 @@ namespace Tokiota.Redis.Protocol
             if (values.Length == 0)
                 throw new ArgumentException("values");
 
-            return this.Connection.SendExpectInt(Commands.MSet.Combine(keys.ToByteArrays(), values.ToByteArrays())) == 1;
+            return this.Connection.SendExpectLong(Commands.MSet.Combine(keys.ToByteArrays(), values.ToByteArrays())) == 1;
         }
 
         public void PSetEx(string key, long expireInMs, byte[] value)

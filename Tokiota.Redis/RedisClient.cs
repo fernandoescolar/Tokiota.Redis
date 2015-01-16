@@ -6,8 +6,8 @@ namespace Tokiota.Redis
 {
     public class RedisClient : IRedisClient
     {
-        private readonly RedisEndpoint endpoint;
         private readonly IRedisConnection connection;
+        private readonly RedisEndpoint endpoint;
 
         private IRedisConnectionCommands connections;
         private IRedisKeysCommands keys;
@@ -16,13 +16,13 @@ namespace Tokiota.Redis
         private IRedisListsCommands lists;
         private IRedisSetsCommands sets;
 
-        public RedisClient(RedisEndpoint endpoint) 
-            : this(endpoint, new RedisConnection(endpoint.Host, endpoint.Port, endpoint.SendTimeout, endpoint.UseSsl))
+        public RedisClient(RedisEndpoint endpoint)
+            : this(endpoint, new RedisConnection(endpoint.Host, endpoint.Port, endpoint.UseSsl, endpoint.Timeout))
         {            
         }
 
         public RedisClient(string host, int port, string password)
-            : this(new RedisEndpoint { Host = host, Port = port, Password = password, UseSsl = port != 6379, SendTimeout = 30 })
+            : this(new RedisEndpoint { Host = host, Port = port, Password = password, UseSsl = port != 6379, Timeout = TimeSpan.FromSeconds(30) })
         {
         }
 
@@ -41,32 +41,32 @@ namespace Tokiota.Redis
         {
         }
 
-        internal RedisClient (RedisEndpoint endpoint, IRedisConnection connection)
+        internal RedisClient(RedisEndpoint endpoint, IRedisConnection connection)
 	    {
             this.endpoint = endpoint;
             this.connection = connection;
-            this.connection.Connecting += this.OnConnecting;
-            this.connection.Disconnecting += this.OnDisconnecting;
+            this.connection.Connecting += OnConnecting;
+            this.connection.Disconnecting += OnDisconnecting;
 	    }
        
         public IRedisConnectionCommands Connection
         {
-            get { return this.connections ?? (this.connections = new ConnecionComponent(this.connection)); }
+            get { return this.connections ?? (this.connections = new ConnectionCommands(this.connection)); }
         }
 
         public IRedisKeysCommands Keys
         {
-            get { return this.keys ?? (this.keys = new KeysComponent(this.connection)); }
+            get { return this.keys ?? (this.keys = new KeysCommands(this.connection)); }
         }
 
         public IRedisStringsCommands Strings
         {
-            get { return this.strings ?? (this.strings = new StringsComponent(this.connection)); }
+            get { return this.strings ?? (this.strings = new StringsCommands(this.connection)); }
         }
 
         public IRedisHashesCommands Hashes
         {
-            get { return this.hashes ?? (this.hashes = new HashesComponent(this.connection)); }
+            get { return this.hashes ?? (this.hashes = new HashesCommands(this.connection)); }
         }
 
         public IRedisListsCommands Lists
@@ -76,7 +76,7 @@ namespace Tokiota.Redis
 
         public IRedisSetsCommands Sets
         {
-            get { return this.sets ?? (this.sets = new SetsComponent(this.connection)); }
+            get { return this.sets ?? (this.sets = new SetsCommands(this.connection)); }
         }
 
         public void Dispose()
@@ -88,21 +88,26 @@ namespace Tokiota.Redis
         {
             if (disposing)
             {
-                this.connection.Connecting -= this.OnConnecting;
+                this.connection.Connecting -= OnConnecting;
+                this.connection.Disconnecting -= OnDisconnecting;
                 this.connection.Dispose();
-                this.connection.Disconnecting -= this.OnDisconnecting;
             }
         }
-
+        
         private void OnConnecting(object sender, EventArgs e)
         {
-            if (this.endpoint.Password != null)
+            if (!string.IsNullOrEmpty(this.endpoint.Password))
+            {
                 this.Connection.Auth(this.endpoint.Password);
+            }
         }
 
         private void OnDisconnecting(object sender, EventArgs e)
         {
-            this.Connection.Quit();
+            if (!string.IsNullOrEmpty(this.endpoint.Password))
+            {
+                this.Connection.Quit();
+            }
         }
     }
 }

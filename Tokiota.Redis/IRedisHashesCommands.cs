@@ -14,7 +14,7 @@ namespace Tokiota.Redis
         byte[] HGet(string hashId, string key);
         byte[][] HGetAll(string hashId);
         string HGetString(string hashId, string key);
-        int HIncrBy(string hashId, byte[] key, int incrementBy);
+        long HIncrBy(string hashId, byte[] key, int incrementBy);
         long HIncrBy(string hashId, byte[] key, long incrementBy);
         double HIncrByFloat(string hashId, byte[] key, double incrementBy);
         byte[][] HKeys(string hashId);

@@ -19,8 +19,7 @@ namespace Tokiota.Redis.Console.Net
         private readonly ByteBuffer inBuffer = new ByteBuffer();
 
         private Socket socket;
-        private SslStream sslStream;
-        private BufferedStream bstream;
+        private Stream socketStream;
 
         private int indentCount = 0;
 
@@ -85,8 +84,8 @@ namespace Tokiota.Redis.Console.Net
                 this.socket.Close();
                 this.outBuffer.Dispose();
                 this.socket = null;
-                this.bstream.Dispose();
-                this.bstream = null;
+                this.socketStream.Dispose();
+                this.socketStream = null;
             }
         }
 
@@ -103,19 +102,18 @@ namespace Tokiota.Redis.Console.Net
                 return;
             }
 
-            var stream = (Stream)new NetworkStream(this.socket);
+            this.socketStream = new NetworkStream(this.socket);
             if (this.UseSsl)
             {
-                this.sslStream = new SslStream(stream, false, null, null);
-                this.sslStream.AuthenticateAsClient(this.Host);
+                var sslStream = new SslStream(this.socketStream, false, null, null);
+                sslStream.AuthenticateAsClient(this.Host);
 
-                if (!this.sslStream.IsEncrypted)
+                if (!sslStream.IsEncrypted)
                     throw new Exception("Could not establish an encrypted connection to " + this.Host);
 
-                stream = (Stream)this.sslStream;
+                this.socketStream = sslStream;
             }
 
-            this.bstream = new BufferedStream(stream, BufferSize);
             this.OnConnecting();
             this.BeginReceive();
         }
@@ -134,10 +132,7 @@ namespace Tokiota.Redis.Console.Net
                 var bytesRead = 0;
                 while ((bytesRead = this.outBuffer.Read(bytes, 0, bytes.Length)) > 0)
                 {
-                    if (this.sslStream == null)
-                        this.socket.Send(bytes, 0, bytesRead, SocketFlags.None);
-                    else
-                        this.sslStream.Write(bytes, 0, bytesRead);
+                    this.socketStream.Write(bytes, 0, bytesRead);
                 }
             }
             catch (SocketException)
@@ -158,22 +153,22 @@ namespace Tokiota.Redis.Console.Net
         private void BeginReceive()
         {
             var buffer = new byte[BufferSize];
-            if (this.bstream != null)
+            if (this.socketStream != null)
             {
-                this.bstream.BeginRead(buffer, 0, buffer.Length, EndReceive, buffer);
+                this.socketStream.BeginRead(buffer, 0, buffer.Length, EndReceive, buffer);
             }
         }
 
         private void EndReceive(IAsyncResult ar)
         {
-            if (this.bstream == null) return;
+            if (this.socketStream == null) return;
 
             var buffer = ar.AsyncState as byte[];
             if (buffer != null)
             {
                 try
                 {
-                    var read = this.bstream.EndRead(ar);
+                    var read = this.socketStream.EndRead(ar);
                     this.inBuffer.Write(buffer, 0, read);
 
                     if (read < buffer.Length)
