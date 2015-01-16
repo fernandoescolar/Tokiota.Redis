@@ -11,285 +11,285 @@ namespace Tokiota.Redis.Protocol
         {
         }
 
-        public long SAdd(string setId, byte[] value)
+        public long SAdd(string key, byte[] member)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
-            if (value == null)
-                throw new ArgumentNullException("value");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (member == null)
+                throw new ArgumentNullException("member");
 
-            return this.Connection.SendExpectLong(Commands.SAdd, setId.ToByteArray(), value);
+            return this.Connection.SendExpectLong(Commands.SAdd, key.ToByteArray(), member);
         }
 
-        public long SAdd(string setId, string value)
+        public long SAdd(string key, string member)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
-            if (value == null)
-                throw new ArgumentNullException("value");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (member == null)
+                throw new ArgumentNullException("member");
 
-            return this.Connection.SendExpectLong(Commands.SAdd, setId.ToByteArray(), value.ToByteArray());
+            return this.Connection.SendExpectLong(Commands.SAdd, key.ToByteArray(), member.ToByteArray());
         }
 
-        public long SAdd(string setId, byte[][] values)
+        public long SAdd(string key, byte[][] members)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
-            if (values == null)
-                throw new ArgumentNullException("values");
-            if (values.Length == 0)
-                throw new ArgumentException("values");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (members == null)
+                throw new ArgumentNullException("members");
+            if (members.Length == 0)
+                throw new ArgumentException("members");
 
-            return this.Connection.SendExpectLong(Commands.SAdd.Merge(setId.ToByteArray().Merge(values)));
+            return this.Connection.SendExpectLong(Commands.SAdd.Merge(key.ToByteArray().Merge(members)));
         }
 
-        public long SAdd(string setId, string[] values)
+        public long SAdd(string key, string[] members)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
-            if (values == null)
-                throw new ArgumentNullException("values");
-            if (values.Length == 0)
-                throw new ArgumentException("values");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (members == null)
+                throw new ArgumentNullException("members");
+            if (members.Length == 0)
+                throw new ArgumentException("members");
 
-            return this.Connection.SendExpectLong(Commands.SAdd.Merge(setId.ToByteArray().Merge(values)));
+            return this.Connection.SendExpectLong(Commands.SAdd.Merge(key.ToByteArray().Merge(members)));
         }
 
-        public long SCard(string setId)
+        public long SCard(string key)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.SCard, setId.ToByteArray());
+            return this.Connection.SendExpectLong(Commands.SCard, key.ToByteArray());
         }
 
-        public byte[][] SDiff(string fromSetId, params string[] withSetIds)
+        public byte[][] SDiff(string fromKey, params string[] withKeys)
         {
-            if (fromSetId == null)
-                throw new ArgumentNullException("fromSetId");
-            if (withSetIds == null)
-                throw new ArgumentNullException("withSetIds");
+            if (fromKey == null)
+                throw new ArgumentNullException("fromKey");
+            if (withKeys == null)
+                throw new ArgumentNullException("withKeys");
 
-            return this.Connection.SendExpectMultiData(Commands.SDiff.Merge(fromSetId.ToByteArray().Merge(withSetIds)));
+            return this.Connection.SendExpectMultiData(Commands.SDiff.Merge(fromKey.ToByteArray().Merge(withKeys)));
         }
 
-        public string[] SDiffString(string fromSetId, params string[] withSetIds)
+        public string[] SDiffString(string fromKey, params string[] withKeys)
         {
-            if (fromSetId == null)
-                throw new ArgumentNullException("fromSetId");
-            if (withSetIds == null)
-                throw new ArgumentNullException("withSetIds");
+            if (fromKey == null)
+                throw new ArgumentNullException("fromKey");
+            if (withKeys == null)
+                throw new ArgumentNullException("withKeys");
 
-            return this.Connection.SendExpectMultiData(Commands.SDiff.Merge(fromSetId.ToByteArray().Merge(withSetIds))).ToUtf8Strings();
+            return this.Connection.SendExpectMultiData(Commands.SDiff.Merge(fromKey.ToByteArray().Merge(withKeys))).ToUtf8Strings();
         }
 
-        public void SDiffStore(string intoSetId, string fromSetId, params string[] withSetIds)
+        public void SDiffStore(string intoKey, string fromKey, params string[] withKeys)
         {
-            if (intoSetId == null)
-                throw new ArgumentNullException("intoSetId");
-            if (fromSetId == null)
-                throw new ArgumentNullException("fromSetId");
-            if (withSetIds == null)
-                throw new ArgumentNullException("withSetIds");
+            if (intoKey == null)
+                throw new ArgumentNullException("intoKey");
+            if (fromKey == null)
+                throw new ArgumentNullException("fromKey");
+            if (withKeys == null)
+                throw new ArgumentNullException("withKeys");
             
-            var list = new List<string>(withSetIds);
-            list.Insert(0, fromSetId);
-            list.Insert(0, intoSetId);
+            var list = new List<string>(withKeys);
+            list.Insert(0, fromKey);
+            list.Insert(0, intoKey);
 
             this.Connection.SendExpectSuccess(Commands.SDiffStore.Merge(list.ToArray()));
         }
 
-        public byte[][] SInter(params string[] setIds)
+        public byte[][] SInter(params string[] keys)
         {
-            if (setIds == null)
-                throw new ArgumentNullException("setIds");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
 
-            return this.Connection.SendExpectMultiData(Commands.SInter.Merge(setIds));
+            return this.Connection.SendExpectMultiData(Commands.SInter.Merge(keys));
         }
 
-        public string[] SInterStrings(params string[] setIds)
+        public string[] SInterStrings(params string[] keys)
         {
-            if (setIds == null)
-                throw new ArgumentNullException("setIds");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
 
-            return this.Connection.SendExpectMultiData(Commands.SInter.Merge(setIds)).ToUtf8Strings();
+            return this.Connection.SendExpectMultiData(Commands.SInter.Merge(keys)).ToUtf8Strings();
         }
 
-        public void SInterStore(string intoSetId, params string[] setIds)
+        public void SInterStore(string intoKey, params string[] keys)
         {
-            if (intoSetId == null)
-                throw new ArgumentNullException("intoSetId");
-            if (setIds == null)
-                throw new ArgumentNullException("setIds");
+            if (intoKey == null)
+                throw new ArgumentNullException("intoKey");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
 
-            this.Connection.SendExpectSuccess(Commands.SInterStore.Merge(intoSetId.ToByteArray().Merge(setIds)));
+            this.Connection.SendExpectSuccess(Commands.SInterStore.Merge(intoKey.ToByteArray().Merge(keys)));
         }
 
-        public long SIsMember(string setId, byte[] value)
+        public long SIsMember(string key, byte[] member)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
-            if (value == null)
-                throw new ArgumentNullException("value");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (member == null)
+                throw new ArgumentNullException("member");
 
-            return this.Connection.SendExpectLong(Commands.SIsMember, setId.ToByteArray(), value);
+            return this.Connection.SendExpectLong(Commands.SIsMember, key.ToByteArray(), member);
         }
 
-        public long SIsMember(string setId, string value)
+        public long SIsMember(string key, string member)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
-            if (value == null)
-                throw new ArgumentNullException("value");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (member == null)
+                throw new ArgumentNullException("member");
 
-            return this.Connection.SendExpectLong(Commands.SIsMember, setId.ToByteArray(), value.ToByteArray());
+            return this.Connection.SendExpectLong(Commands.SIsMember, key.ToByteArray(), member.ToByteArray());
         }
 
-        public byte[][] SMembers(string setId)
+        public byte[][] SMembers(string key)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectMultiData(Commands.SMembers, setId.ToByteArray());
+            return this.Connection.SendExpectMultiData(Commands.SMembers, key.ToByteArray());
         }
 
-        public string[] SMemberStrings(string setId)
+        public string[] SMemberStrings(string key)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectMultiData(Commands.SMembers, setId.ToByteArray()).ToUtf8Strings();
+            return this.Connection.SendExpectMultiData(Commands.SMembers, key.ToByteArray()).ToUtf8Strings();
         }
 
-        public void SMove(string fromSetId, string toSetId, byte[] value)
+        public void SMove(string fromKey, string toKey, byte[] member)
         {
-            if (fromSetId == null)
-                throw new ArgumentNullException("fromSetId");
-            if (toSetId == null)
-                throw new ArgumentNullException("toSetId");
-            if (value == null)
-                throw new ArgumentNullException("value");
+            if (fromKey == null)
+                throw new ArgumentNullException("fromKey");
+            if (toKey == null)
+                throw new ArgumentNullException("toKey");
+            if (member == null)
+                throw new ArgumentNullException("member");
 
-            this.Connection.SendExpectSuccess(Commands.SMove, fromSetId.ToByteArray(), toSetId.ToByteArray(), value);
+            this.Connection.SendExpectSuccess(Commands.SMove, fromKey.ToByteArray(), toKey.ToByteArray(), member);
         }
 
-        public void SMove(string fromSetId, string toSetId, string value)
+        public void SMove(string fromKey, string toKey, string member)
         {
-            if (fromSetId == null)
-                throw new ArgumentNullException("fromSetId");
-            if (toSetId == null)
-                throw new ArgumentNullException("toSetId");
-            if (value == null)
-                throw new ArgumentNullException("value");
+            if (fromKey == null)
+                throw new ArgumentNullException("fromKey");
+            if (toKey == null)
+                throw new ArgumentNullException("toKey");
+            if (member == null)
+                throw new ArgumentNullException("member");
 
-            this.Connection.SendExpectSuccess(Commands.SMove, fromSetId.ToByteArray(), toSetId.ToByteArray(), value.ToByteArray());
+            this.Connection.SendExpectSuccess(Commands.SMove, fromKey.ToByteArray(), toKey.ToByteArray(), member.ToByteArray());
         }
 
-        public byte[] SPop(string setId)
+        public byte[] SPop(string key)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectData(Commands.SPop, setId.ToByteArray());
+            return this.Connection.SendExpectData(Commands.SPop, key.ToByteArray());
         }
 
-        public string SPopString(string setId)
+        public string SPopString(string key)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectData(Commands.SPop, setId.ToByteArray()).ToUtf8String();
+            return this.Connection.SendExpectData(Commands.SPop, key.ToByteArray()).ToUtf8String();
         }
 
-        public byte[] SRandMember(string setId)
+        public byte[] SRandMember(string key)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectData(Commands.SRandMember, setId.ToByteArray());
+            return this.Connection.SendExpectData(Commands.SRandMember, key.ToByteArray());
         }
 
-        public byte[][] SRandMember(string setId, int count)
+        public byte[][] SRandMember(string key, int count)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectMultiData(Commands.SRandMember, setId.ToByteArray(), count.ToByteArray());
+            return this.Connection.SendExpectMultiData(Commands.SRandMember, key.ToByteArray(), count.ToByteArray());
         }
 
-        public string SRandMemberString(string setId)
+        public string SRandMemberString(string key)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectData(Commands.SRandMember, setId.ToByteArray()).ToUtf8String();
+            return this.Connection.SendExpectData(Commands.SRandMember, key.ToByteArray()).ToUtf8String();
         }
 
-        public string[] SRandMemberString(string setId, int count)
+        public string[] SRandMemberString(string key, int count)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectMultiData(Commands.SRandMember, setId.ToByteArray(), count.ToByteArray()).ToUtf8Strings();
+            return this.Connection.SendExpectMultiData(Commands.SRandMember, key.ToByteArray(), count.ToByteArray()).ToUtf8Strings();
         }
 
-        public long SRem(string setId, byte[][] values)
+        public long SRem(string key, byte[][] members)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
-            if (values == null)
-                throw new ArgumentNullException("values");
-            if (values.Length == 0)
-                throw new ArgumentException("values");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (members == null)
+                throw new ArgumentNullException("members");
+            if (members.Length == 0)
+                throw new ArgumentException("members");
 
-            return this.Connection.SendExpectLong(Commands.SRem.Merge(setId.ToByteArray().Merge(values)));
+            return this.Connection.SendExpectLong(Commands.SRem.Merge(key.ToByteArray().Merge(members)));
         }
 
-        public long SRem(string setId, string[] values)
+        public long SRem(string key, string[] members)
         {
-            if (setId == null)
-                throw new ArgumentNullException("setId");
-            if (values == null)
-                throw new ArgumentNullException("values");
-            if (values.Length == 0)
-                throw new ArgumentException("values");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (members == null)
+                throw new ArgumentNullException("members");
+            if (members.Length == 0)
+                throw new ArgumentException("members");
 
-            return this.Connection.SendExpectLong(Commands.SRem.Merge(setId.ToByteArray().Merge(values)));
+            return this.Connection.SendExpectLong(Commands.SRem.Merge(key.ToByteArray().Merge(members)));
         }
 
-        public byte[][] SUnion(params string[] setIds)
+        public byte[][] SUnion(params string[] keys)
         {
-            if (setIds == null)
-                throw new ArgumentNullException("setIds");
-            if (setIds.Length == 0)
-                throw new ArgumentNullException("setIds");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
+            if (keys.Length == 0)
+                throw new ArgumentNullException("keys");
 
-            return this.Connection.SendExpectMultiData(Commands.SUnion.Merge(setIds));
+            return this.Connection.SendExpectMultiData(Commands.SUnion.Merge(keys));
         }
 
-        public string[] SUnionStrings(params string[] setIds)
+        public string[] SUnionStrings(params string[] keys)
         {
-            if (setIds == null)
-                throw new ArgumentNullException("setIds");
-            if (setIds.Length == 0)
-                throw new ArgumentNullException("setIds");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
+            if (keys.Length == 0)
+                throw new ArgumentNullException("keys");
 
-            return this.Connection.SendExpectMultiData(Commands.SUnion.Merge(setIds)).ToUtf8Strings();
+            return this.Connection.SendExpectMultiData(Commands.SUnion.Merge(keys)).ToUtf8Strings();
         }
 
-        public void SUnionStore(string intoSetId, params string[] setIds)
+        public void SUnionStore(string intoKey, params string[] keys)
         {
-            if (intoSetId == null)
-                throw new ArgumentNullException("intoSetId");
-            if (setIds == null)
-                throw new ArgumentNullException("setIds");
-            if (setIds.Length == 0)
-                throw new ArgumentNullException("setIds");
+            if (intoKey == null)
+                throw new ArgumentNullException("intoKey");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
+            if (keys.Length == 0)
+                throw new ArgumentNullException("keys");
 
-            this.Connection.SendExpectSuccess(Commands.SUnionStore.Merge(intoSetId.ToByteArray().Merge(setIds)));
+            this.Connection.SendExpectSuccess(Commands.SUnionStore.Merge(intoKey.ToByteArray().Merge(keys)));
         }
 
-        public byte[][] SScan(string setId, ulong cursor, int count = 10, string match = null)
+        public byte[][] SScan(string key, ulong cursor, int count = 10, string match = null)
         {
             throw new NotImplementedException();
         }

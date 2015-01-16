@@ -17,18 +17,18 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.Del, key.ToByteArray()) == 1;
         }
 
-        public long Del(params string[] args)
+        public long Del(params string[] keys)
         {
-            if (args == null)
-                throw new ArgumentNullException("args");
+            if (keys == null)
+                throw new ArgumentNullException("keys");
 
-            var cmds = new byte[args.Length + 1][];
+            var cmds = new byte[keys.Length + 1][];
             cmds[0] = Commands.Del;
 
             var index = 1;
-            foreach (var arg in args)
+            foreach (var key in keys)
             {
-                cmds[index++] = arg.ToByteArray();
+                cmds[index++] = key.ToByteArray();
             }
 
             return this.Connection.SendExpectLong(cmds);
@@ -58,12 +58,12 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.Expire, key.ToByteArray(), seconds.ToByteArray()) == 1;
         }
 
-        public bool ExpireAt(string key, int time)
+        public bool ExpireAt(string key, int timestamp)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.ExpireAt, key.ToByteArray(), time.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.ExpireAt, key.ToByteArray(), timestamp.ToByteArray()) == 1;
         }
 
         public byte[][] Keys(string pattern)
@@ -98,20 +98,20 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.Persist, key.ToByteArray()) == 1;
         }
 
-        public bool PExpire(string key, long ttlMs)
+        public bool PExpire(string key, long milliseconds)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.PExpire, key.ToByteArray(), ttlMs.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.PExpire, key.ToByteArray(), milliseconds.ToByteArray()) == 1;
         }
 
-        public bool PExpireAt(string key, long unixTimeMs)
+        public bool PExpireAt(string key, long millisecondsTimestamp)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.PExpireAt, key.ToByteArray(), unixTimeMs.ToByteArray()) == 1;
+            return this.Connection.SendExpectLong(Commands.PExpireAt, key.ToByteArray(), millisecondsTimestamp.ToByteArray()) == 1;
         }
 
         public long PTtl(string key)
@@ -127,37 +127,37 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectData(Commands.RandomKey).ToUtf8String();
         }
 
-        public void Rename(string oldKeyname, string newKeyname)
-        {
-            if (oldKeyname == null)
-                throw new ArgumentNullException("oldKeyname");
-
-            if (newKeyname == null)
-                throw new ArgumentNullException("newKeyname");
-
-            this.Connection.SendExpectSuccess(Commands.Rename, oldKeyname.ToByteArray(), newKeyname.ToByteArray());
-        }
-
-        public bool RenameNx(string oldKeyname, string newKeyname)
-        {
-            if (oldKeyname == null)
-                throw new ArgumentNullException("oldKeyname");
-
-            if (newKeyname == null)
-                throw new ArgumentNullException("newKeyname");
-
-            return this.Connection.SendExpectLong(Commands.RenameNx, oldKeyname.ToByteArray(), newKeyname.ToByteArray()) == 1;
-        }
-
-        public byte[] Restore(string key, long expireMs, byte[] dumpValue)
+        public void Rename(string key, string newKey)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectData(Commands.Restore, key.ToByteArray(), expireMs.ToByteArray(), dumpValue);
+            if (newKey == null)
+                throw new ArgumentNullException("newKey");
+
+            this.Connection.SendExpectSuccess(Commands.Rename, key.ToByteArray(), newKey.ToByteArray());
         }
 
-        public byte[] Sort(string key, byte[][] ags)
+        public bool RenameNx(string key, string newKey)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            if (newKey == null)
+                throw new ArgumentNullException("newKey");
+
+            return this.Connection.SendExpectLong(Commands.RenameNx, key.ToByteArray(), newKey.ToByteArray()) == 1;
+        }
+
+        public byte[] Restore(string key, long ttl, byte[] value)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            return this.Connection.SendExpectData(Commands.Restore, key.ToByteArray(), ttl.ToByteArray(), value);
+        }
+
+        public byte[] Sort(string key, byte[][] args)
         {
             throw new NotImplementedException();
         }

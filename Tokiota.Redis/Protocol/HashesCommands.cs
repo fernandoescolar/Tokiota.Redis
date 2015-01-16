@@ -10,335 +10,335 @@ namespace Tokiota.Redis.Protocol
         {
         }
 
-        public long HDel(string hashId, string key)
+        public long HDel(string key, string field)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectLong(Commands.HDel, key.ToByteArray(), field.ToByteArray());
+        }
+
+        public long HDel(string key, byte[] field)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectLong(Commands.HDel, key.ToByteArray(), field);
+        }
+
+        public long HDel(string key, string[] fields)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (fields == null)
+                throw new ArgumentNullException("fields");
+            if (fields.Length == 0)
+                throw new ArgumentException("fields");
+
+            return this.Connection.SendExpectLong(Commands.HDel.Merge(key.ToByteArray().Merge(fields)));
+        }
+
+        public long HDel(string key, byte[][] fields)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (fields == null)
+                throw new ArgumentNullException("fields");
+            if (fields.Length == 0)
+                throw new ArgumentException("fields");
+
+            return this.Connection.SendExpectLong(Commands.HDel.Merge(key.ToByteArray().Merge(fields)));
+        }
+
+        public long HExists(string key, string field)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectLong(Commands.HExists, key.ToByteArray(), field.ToByteArray());
+        }
+
+        public long HExists(string key, byte[] field)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectLong(Commands.HExists, key.ToByteArray(), field);
+        }
+
+        public byte[] HGet(string key, string field)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectData(Commands.HGet, key.ToByteArray(), field.ToByteArray());
+        }
+
+        public byte[] HGet(string key, byte[] field)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectData(Commands.HGet, key.ToByteArray(), field);
+        }
+
+        public string HGetString(string key, string field)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectData(Commands.HGet, key.ToByteArray(), field.ToByteArray()).ToUtf8String();
+        }
+
+        public byte[][] HGetAll(string key)
+        {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.HDel, hashId.ToByteArray(), key.ToByteArray());
+            return this.Connection.SendExpectMultiData(Commands.HGetAll, key.ToByteArray());
         }
 
-        public long HDel(string hashId, byte[] key)
+        public long HIncrBy(string key, byte[] field, int increment)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectLong(Commands.HIncrBy, key.ToByteArray(), field, increment.ToByteArray());
+        }
+
+        public long HIncrBy(string key, byte[] field, long increment)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectLong(Commands.HIncrBy, key.ToByteArray(), field, increment.ToByteArray());
+        }
+
+        public double HIncrByFloat(string key, byte[] field, double increment)
+        {
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
+
+            return this.Connection.SendExpectDouble(Commands.HIncrByFloat, key.ToByteArray(), field, increment.ToByteArray());
+        }
+
+        public string[] HKeyStrings(string key)
+        {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.HDel, hashId.ToByteArray(), key);
+            return this.Connection.SendExpectMultiData(Commands.HKeys, key.ToByteArray()).ToUtf8Strings();
         }
 
-        public long HDel(string hashId, string[] keys)
+        public byte[][] HKeys(string key)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Length == 0)
-                throw new ArgumentException("keys");
-
-            return this.Connection.SendExpectLong(Commands.HDel.Merge(hashId.ToByteArray().Merge(keys)));
-        }
-
-        public long HDel(string hashId, byte[][] keys)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Length == 0)
-                throw new ArgumentException("keys");
-
-            return this.Connection.SendExpectLong(Commands.HDel.Merge(hashId.ToByteArray().Merge(keys)));
-        }
-
-        public long HExists(string hashId, string key)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.HExists, hashId.ToByteArray(), key.ToByteArray());
+            return this.Connection.SendExpectMultiData(Commands.HKeys, key.ToByteArray());
         }
 
-        public long HExists(string hashId, byte[] key)
+        public long HLen(string key)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (key == null)
+            if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectLong(Commands.HExists, hashId.ToByteArray(), key);
+            return this.Connection.SendExpectLong(Commands.HLen, key.ToByteArray());
         }
 
-        public byte[] HGet(string hashId, string key)
+        public byte[][] HMGet(string key, params string[] fields)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (fields == null)
+                throw new ArgumentNullException("fields");
+            if (fields.Length == 0)
+                throw new ArgumentNullException("fields");
 
-            return this.Connection.SendExpectData(Commands.HGet, hashId.ToByteArray(), key.ToByteArray());
+            return this.Connection.SendExpectMultiData(Commands.HMGet.Merge(key.ToByteArray().Merge(fields)));
         }
 
-        public byte[] HGet(string hashId, byte[] key)
+        public byte[][] HMGet(string key, params byte[][] fields)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (fields == null)
+                throw new ArgumentNullException("fields");
+            if (fields.Length == 0)
+                throw new ArgumentNullException("fields");
 
-            return this.Connection.SendExpectData(Commands.HGet, hashId.ToByteArray(), key);
+            return this.Connection.SendExpectMultiData(Commands.HMGet.Merge(key.ToByteArray().Merge(fields)));
         }
 
-        public string HGetString(string hashId, string key)
+        public string[] HMGetStrings(string key, params string[] fields)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (fields == null)
+                throw new ArgumentNullException("fields");
+            if (fields.Length == 0)
+                throw new ArgumentNullException("fields");
 
-            return this.Connection.SendExpectData(Commands.HGet, hashId.ToByteArray(), key.ToByteArray()).ToUtf8String();
+            return this.Connection.SendExpectMultiData(Commands.HMGet.Merge(key.ToByteArray().Merge(fields))).ToUtf8Strings();
         }
 
-        public byte[][] HGetAll(string hashId)
+        public void HMSet(string key, byte[][] fields, byte[][] values)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-
-            return this.Connection.SendExpectMultiData(Commands.HGetAll, hashId.ToByteArray());
-        }
-
-        public long HIncrBy(string hashId, byte[] key, int incrementBy)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
-
-            return this.Connection.SendExpectLong(Commands.HIncrBy, hashId.ToByteArray(), key, incrementBy.ToByteArray());
-        }
-
-        public long HIncrBy(string hashId, byte[] key, long incrementBy)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (key == null)
-                throw new ArgumentNullException("key");
-
-            return this.Connection.SendExpectLong(Commands.HIncrBy, hashId.ToByteArray(), key, incrementBy.ToByteArray());
-        }
-
-        public double HIncrByFloat(string hashId, byte[] key, double incrementBy)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (key == null)
-                throw new ArgumentNullException("key");
-
-            return this.Connection.SendExpectDouble(Commands.HIncrByFloat, hashId.ToByteArray(), key, incrementBy.ToByteArray());
-        }
-
-        public string[] HKeyStrings(string hashId)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-
-            return this.Connection.SendExpectMultiData(Commands.HKeys, hashId.ToByteArray()).ToUtf8Strings();
-        }
-
-        public byte[][] HKeys(string hashId)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-
-            return this.Connection.SendExpectMultiData(Commands.HKeys, hashId.ToByteArray());
-        }
-
-        public long HLen(string hashId)
-        {
-            if (string.IsNullOrEmpty(hashId))
-                throw new ArgumentNullException("hashId");
-
-            return this.Connection.SendExpectLong(Commands.HLen, hashId.ToByteArray());
-        }
-
-        public byte[][] HMGet(string hashId, params string[] keys)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Length == 0)
-                throw new ArgumentNullException("keys");
-
-            return this.Connection.SendExpectMultiData(Commands.HMGet.Merge(hashId.ToByteArray().Merge(keys)));
-        }
-
-        public byte[][] HMGet(string hashId, params byte[][] keys)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Length == 0)
-                throw new ArgumentNullException("keys");
-
-            return this.Connection.SendExpectMultiData(Commands.HMGet.Merge(hashId.ToByteArray().Merge(keys)));
-        }
-
-        public string[] HMGetStrings(string hashId, params string[] keys)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Length == 0)
-                throw new ArgumentNullException("keys");
-
-            return this.Connection.SendExpectMultiData(Commands.HMGet.Merge(hashId.ToByteArray().Merge(keys))).ToUtf8Strings();
-        }
-
-        public void HMSet(string hashId, byte[][] keys, byte[][] values)
-        {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Length == 0)
-                throw new ArgumentNullException("keys");
+            if (fields == null)
+                throw new ArgumentNullException("fields");
+            if (fields.Length == 0)
+                throw new ArgumentNullException("fields");
             if (values == null)
                 throw new ArgumentNullException("values");
             if (values.Length == 0)
                 throw new ArgumentNullException("values");
 
-            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Combine(keys, values)));
+            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(key.ToByteArray().Combine(fields, values)));
         }
 
-        public void HMSet(string hashId, string[] keys, byte[][] values)
+        public void HMSet(string key, string[] fields, byte[][] values)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Length == 0)
-                throw new ArgumentNullException("keys");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (fields == null)
+                throw new ArgumentNullException("fields");
+            if (fields.Length == 0)
+                throw new ArgumentNullException("fields");
             if (values == null)
                 throw new ArgumentNullException("values");
             if (values.Length == 0)
                 throw new ArgumentNullException("values");
 
-            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Combine(keys.ToByteArrays(), values)));
+            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(key.ToByteArray().Combine(fields.ToByteArrays(), values)));
         }
 
-        public void HMSet(string hashId, string[] keys, string[] values)
+        public void HMSet(string key, string[] fields, string[] values)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
-            if (keys == null)
-                throw new ArgumentNullException("keys");
-            if (keys.Length == 0)
-                throw new ArgumentNullException("keys");
+            if (key == null)
+                throw new ArgumentNullException("key");
+            if (fields == null)
+                throw new ArgumentNullException("fields");
+            if (fields.Length == 0)
+                throw new ArgumentNullException("fields");
             if (values == null)
                 throw new ArgumentNullException("values");
             if (values.Length == 0)
                 throw new ArgumentNullException("values");
 
-            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(hashId.ToByteArray().Combine(keys.ToByteArrays(), values.ToByteArrays())));
+            this.Connection.SendExpectSuccess(Commands.HMSet.Merge(key.ToByteArray().Combine(fields.ToByteArrays(), values.ToByteArrays())));
         }
 
-        public long HSet(string hashId, byte[] key, byte[] value)
+        public long HSet(string key, byte[] field, byte[] value)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            return this.Connection.SendExpectLong(Commands.HSet, hashId.ToByteArray(), key, value);
+            return this.Connection.SendExpectLong(Commands.HSet, key.ToByteArray(), field, value);
         }
 
-        public long HSet(string hashId, string key, byte[] value)
+        public long HSet(string key, string field, byte[] value)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            return this.Connection.SendExpectLong(Commands.HSet, hashId.ToByteArray(), key.ToByteArray(), value);
+            return this.Connection.SendExpectLong(Commands.HSet, key.ToByteArray(), field.ToByteArray(), value);
         }
 
-        public long HSet(string hashId, string key, string value)
+        public long HSet(string key, string field, string value)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            return this.Connection.SendExpectLong(Commands.HSet, hashId.ToByteArray(), key.ToByteArray(), value.ToByteArray());
+            return this.Connection.SendExpectLong(Commands.HSet, key.ToByteArray(), field.ToByteArray(), value.ToByteArray());
         }
 
-        public long HSetNx(string hashId, byte[] key, byte[] value)
+        public long HSetNx(string key, byte[] field, byte[] value)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            return this.Connection.SendExpectLong(Commands.HSetNx, hashId.ToByteArray(), key, value);
+            return this.Connection.SendExpectLong(Commands.HSetNx, key.ToByteArray(), field, value);
         }
 
-        public long HSetNx(string hashId, string key, byte[] value)
+        public long HSetNx(string key, string field, byte[] value)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            return this.Connection.SendExpectLong(Commands.HSetNx, hashId.ToByteArray(), key.ToByteArray(), value);
+            return this.Connection.SendExpectLong(Commands.HSetNx, key.ToByteArray(), field.ToByteArray(), value);
         }
 
-        public long HSetNx(string hashId, string key, string value)
+        public long HSetNx(string key, string field, string value)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
             if (key == null)
                 throw new ArgumentNullException("key");
+            if (field == null)
+                throw new ArgumentNullException("field");
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            return this.Connection.SendExpectLong(Commands.HSetNx, hashId.ToByteArray(), key.ToByteArray(), value.ToByteArray());
+            return this.Connection.SendExpectLong(Commands.HSetNx, key.ToByteArray(), field.ToByteArray(), value.ToByteArray());
         }
 
-        public byte[][] HVals(string hashId)
+        public byte[][] HVals(string key)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectMultiData(Commands.HVals, hashId.ToByteArray());
+            return this.Connection.SendExpectMultiData(Commands.HVals, key.ToByteArray());
         }
 
-        public string[] HValStrings(string hashId)
+        public string[] HValStrings(string key)
         {
-            if (hashId == null)
-                throw new ArgumentNullException("hashId");
+            if (key == null)
+                throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectMultiData(Commands.HVals, hashId.ToByteArray()).ToUtf8Strings();
+            return this.Connection.SendExpectMultiData(Commands.HVals, key.ToByteArray()).ToUtf8Strings();
         }
 
-        public byte[] HScan(string hashId, ulong cursor, int count = 10, string match = null)
+        public byte[] HScan(string key, ulong cursor, int count = 10, string match = null)
         {
             throw new NotImplementedException();
         }

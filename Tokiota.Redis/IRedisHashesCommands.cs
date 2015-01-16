@@ -4,36 +4,36 @@ namespace Tokiota.Redis
 {
     public interface IRedisHashesCommands
     {
-        long HDel(string hashId, byte[] key);
-        long HDel(string hashId, byte[][] keys);
-        long HDel(string hashId, string key);
-        long HDel(string hashId, string[] keys);
-        long HExists(string hashId, byte[] key);
-        long HExists(string hashId, string key);
-        byte[] HGet(string hashId, byte[] key);
-        byte[] HGet(string hashId, string key);
-        byte[][] HGetAll(string hashId);
-        string HGetString(string hashId, string key);
-        long HIncrBy(string hashId, byte[] key, int incrementBy);
-        long HIncrBy(string hashId, byte[] key, long incrementBy);
-        double HIncrByFloat(string hashId, byte[] key, double incrementBy);
-        byte[][] HKeys(string hashId);
-        string[] HKeyStrings(string hashId);
-        long HLen(string hashId);
-        byte[][] HMGet(string hashId, params byte[][] keys);
-        byte[][] HMGet(string hashId, params string[] keys);
-        string[] HMGetStrings(string hashId, params string[] keys);
-        void HMSet(string hashId, byte[][] keys, byte[][] values);
-        void HMSet(string hashId, string[] keys, byte[][] values);
-        void HMSet(string hashId, string[] keys, string[] values);
-        byte[] HScan(string hashId, ulong cursor, int count = 10, string match = null);
-        long HSet(string hashId, byte[] key, byte[] value);
-        long HSet(string hashId, string key, byte[] value);
-        long HSet(string hashId, string key, string value);
-        long HSetNx(string hashId, byte[] key, byte[] value);
-        long HSetNx(string hashId, string key, byte[] value);
-        long HSetNx(string hashId, string key, string value);
-        byte[][] HVals(string hashId);
-        string[] HValStrings(string hashId);
+        long HDel(string key, byte[] field);
+        long HDel(string key, byte[][] fields);
+        long HDel(string key, string field);
+        long HDel(string key, string[] fields);
+        long HExists(string key, byte[] field);
+        long HExists(string key, string field);
+        byte[] HGet(string key, byte[] field);
+        byte[] HGet(string key, string field);
+        byte[][] HGetAll(string key);
+        string HGetString(string key, string field);
+        long HIncrBy(string key, byte[] field, int increment);
+        long HIncrBy(string key, byte[] field, long increment);
+        double HIncrByFloat(string key, byte[] field, double increment);
+        byte[][] HKeys(string key);
+        string[] HKeyStrings(string key);
+        long HLen(string key);
+        byte[][] HMGet(string key, params byte[][] fields);
+        byte[][] HMGet(string key, params string[] fields);
+        string[] HMGetStrings(string key, params string[] fields);
+        void HMSet(string key, byte[][] fields, byte[][] values);
+        void HMSet(string key, string[] fields, byte[][] values);
+        void HMSet(string key, string[] fields, string[] values);
+        byte[] HScan(string key, ulong cursor, int count = 10, string match = null);
+        long HSet(string key, byte[] field, byte[] value);
+        long HSet(string key, string field, byte[] value);
+        long HSet(string key, string field, string value);
+        long HSetNx(string key, byte[] field, byte[] value);
+        long HSetNx(string key, string field, byte[] value);
+        long HSetNx(string key, string field, string value);
+        byte[][] HVals(string key);
+        string[] HValStrings(string key);
     }
 }

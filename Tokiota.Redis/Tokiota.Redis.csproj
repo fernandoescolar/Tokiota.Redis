@@ -68,7 +68,7 @@
     <Compile Include="Protocol\IOperationRequest.cs" />
     <Compile Include="Protocol\IOperationResponse.cs" />
     <Compile Include="Protocol\KeysCommands.cs" />
-    <Compile Include="Protocol\ListsComponent.cs" />
+    <Compile Include="Protocol\ListsCommands.cs" />
     <Compile Include="Protocol\Operation.cs" />
     <Compile Include="Protocol\OperationRequest.cs" />
     <Compile Include="Protocol\OperationResponse.cs" />

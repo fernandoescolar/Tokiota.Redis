@@ -72,18 +72,18 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.GetBit, key.ToByteArray(), offset.ToByteArray());
         }
 
-        private byte[] GetRange(string key, int min, int max)
+        public byte[] GetRange(string key, int start, int end)
         {
             if (string.IsNullOrEmpty(key))
                 throw new ArgumentNullException("key");
 
 
-            return this.Connection.SendExpectData(Commands.GetRange, key.ToByteArray(), min.ToByteArray(), max.ToByteArray());
+            return this.Connection.SendExpectData(Commands.GetRange, key.ToByteArray(), start.ToByteArray(), end.ToByteArray());
         }
 
-        private string GetRangeString(string key, int min, int max)
+        public string GetRangeString(string key, int start, int end)
         {
-            return this.GetRange(key, min, max).ToUtf8String();
+            return this.GetRange(key, start, end).ToUtf8String();
         }
 
         public byte[] GetSet(string key, byte[] value)
@@ -129,12 +129,12 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.IncrBy, key.ToByteArray(), count.ToByteArray());
         }
 
-        public double IncrByFloat(string key, double incrBy)
+        public double IncrByFloat(string key, double increment)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            return this.Connection.SendExpectDouble(Commands.IncrByFloat, key.ToByteArray(), incrBy.ToByteArray());
+            return this.Connection.SendExpectDouble(Commands.IncrByFloat, key.ToByteArray(), increment.ToByteArray());
         }
 
         public byte[][] MGet(params byte[][] keys)
@@ -227,12 +227,12 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.MSet.Combine(keys.ToByteArrays(), values.ToByteArrays())) == 1;
         }
 
-        public void PSetEx(string key, long expireInMs, byte[] value)
+        public void PSetEx(string key, long milliseconds, byte[] value)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
 
-            this.Connection.SendExpectSuccess(Commands.PSetEx, key.ToByteArray(), expireInMs.ToByteArray(), value);
+            this.Connection.SendExpectSuccess(Commands.PSetEx, key.ToByteArray(), milliseconds.ToByteArray(), value);
         }
 
         public void Set(string key, string value)
@@ -248,7 +248,7 @@ namespace Tokiota.Redis.Protocol
             this.Set(key, value, 0);
         }
 
-        public void Set(string key, byte[] value, int expirySeconds, long expiryMs = 0L)
+        public void Set(string key, byte[] value, int expirySeconds, long expiryMilliseconds = 0L)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
@@ -259,8 +259,8 @@ namespace Tokiota.Redis.Protocol
 
             if (expirySeconds > 0)
                 this.Connection.SendExpectSuccess(Commands.Set, key.ToByteArray(), value, Commands.Ex, expirySeconds.ToByteArray());
-            else if (expiryMs > 0L)
-                this.Connection.SendExpectSuccess(Commands.Set, key.ToByteArray(), value, Commands.Px, expiryMs.ToByteArray());
+            else if (expiryMilliseconds > 0L)
+                this.Connection.SendExpectSuccess(Commands.Set, key.ToByteArray(), value, Commands.Px, expiryMilliseconds.ToByteArray());
             else
                 this.Connection.SendExpectSuccess(Commands.Set, key.ToByteArray(), value);
         }
@@ -276,7 +276,7 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.SetBit, key.ToByteArray(), offset.ToByteArray(), value.ToByteArray());
         }
 
-        public void SetEx(string key, int expireInSeconds, byte[] value)
+        public void SetEx(string key, int seconds, byte[] value)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
@@ -287,15 +287,15 @@ namespace Tokiota.Redis.Protocol
             if (value.Length > 1073741824)
                 throw new ArgumentException("value exceeds 1G", "value");
 
-            this.Connection.SendExpectSuccess(Commands.SetEx, key.ToByteArray(), expireInSeconds.ToByteArray(), value);
+            this.Connection.SendExpectSuccess(Commands.SetEx, key.ToByteArray(), seconds.ToByteArray(), value);
         }
 
-        public void SetEx(string key, int expireInSeconds, string value)
+        public void SetEx(string key, int seconds, string value)
         {
             if (value == null)
                 throw new ArgumentNullException("value");
 
-            this.SetEx(key, expireInSeconds, value.ToByteArray());
+            this.SetEx(key, seconds, value.ToByteArray());
         }
 
         public long SetNx(string key, byte[] value)

@@ -3,34 +3,34 @@ namespace Tokiota.Redis
 {
     public interface IRedisSetsCommands
     {
-        long SAdd(string setId, byte[] value);
-        long SAdd(string setId, byte[][] values);
-        long SAdd(string setId, string value);
-        long SAdd(string setId, string[] values);
-        long SCard(string setId);
-        byte[][] SDiff(string fromSetId, params string[] withSetIds);
-        string[] SDiffString(string fromSetId, params string[] withSetIds);
-        void SDiffStore(string intoSetId, string fromSetId, params string[] withSetIds);
-        byte[][] SInter(params string[] setIds);
-        void SInterStore(string intoSetId, params string[] setIds);
-        string[] SInterStrings(params string[] setIds);
-        long SIsMember(string setId, byte[] value);
-        long SIsMember(string setId, string value);
-        byte[][] SMembers(string setId);
-        string[] SMemberStrings(string setId);
-        void SMove(string fromSetId, string toSetId, byte[] value);
-        void SMove(string fromSetId, string toSetId, string value);
-        byte[] SPop(string setId);
-        string SPopString(string setId);
-        byte[] SRandMember(string setId);
-        byte[][] SRandMember(string setId, int count);
-        string SRandMemberString(string setId);
-        string[] SRandMemberString(string setId, int count);
-        long SRem(string setId, byte[][] values);
-        long SRem(string setId, string[] values);
-        byte[][] SScan(string setId, ulong cursor, int count = 10, string match = null);
-        byte[][] SUnion(params string[] setIds);
-        void SUnionStore(string intoSetId, params string[] setIds);
-        string[] SUnionStrings(params string[] setIds);
+        long SAdd(string key, byte[] member);
+        long SAdd(string key, byte[][] members);
+        long SAdd(string key, string member);
+        long SAdd(string key, string[] members);
+        long SCard(string key);
+        byte[][] SDiff(string fromKey, params string[] withKeys);
+        string[] SDiffString(string fromKey, params string[] withKeys);
+        void SDiffStore(string intoKey, string fromKey, params string[] withKeys);
+        byte[][] SInter(params string[] keys);
+        void SInterStore(string intoKey, params string[] keys);
+        string[] SInterStrings(params string[] keys);
+        long SIsMember(string key, byte[] member);
+        long SIsMember(string key, string member);
+        byte[][] SMembers(string key);
+        string[] SMemberStrings(string key);
+        void SMove(string fromKey, string toKey, byte[] member);
+        void SMove(string fromKey, string toKey, string member);
+        byte[] SPop(string key);
+        string SPopString(string key);
+        byte[] SRandMember(string key);
+        byte[][] SRandMember(string key, int count);
+        string SRandMemberString(string key);
+        string[] SRandMemberString(string key, int count);
+        long SRem(string key, byte[][] members);
+        long SRem(string key, string[] members);
+        byte[][] SScan(string key, ulong cursor, int count = 10, string match = null);
+        byte[][] SUnion(params string[] keys);
+        void SUnionStore(string intoKey, params string[] keys);
+        string[] SUnionStrings(params string[] keys);
     }
 }

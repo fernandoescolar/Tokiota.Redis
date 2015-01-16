@@ -71,7 +71,7 @@ namespace Tokiota.Redis
 
         public IRedisListsCommands Lists
         {
-            get { return this.lists ?? (this.lists = new ListsComponent(this.connection)); }
+            get { return this.lists ?? (this.lists = new ListsCommands(this.connection)); }
         }
 
         public IRedisSetsCommands Sets
