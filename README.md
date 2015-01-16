@@ -1,6 +1,6 @@
 # Tokiota.Redis
 A basic redis client for .net<br/>
-Version: Alpha-WIP (not ready for production environments)<br/>
+Version: Beta-WIP (not ready for production environments)<br/>
 based on https://github.com/migueldeicaza/redis-sharp<br/>
 To use the command prompt tool, go to <a href="#console">Tokiota.Redis.Console section bellow</a>.
 <h2>Usage</h2>
