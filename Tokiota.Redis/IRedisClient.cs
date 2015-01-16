@@ -16,5 +16,7 @@ namespace Tokiota.Redis
         IRedisListsCommands Lists { get; }
 
         IRedisSetsCommands Sets { get; }
+
+        IRedisSortedSetsCommands SortedSets { get; }
     }
 }

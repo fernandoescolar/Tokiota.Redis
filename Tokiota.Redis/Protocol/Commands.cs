@@ -128,6 +128,7 @@ namespace Tokiota.Redis.Protocol
         public static readonly byte[] ZRevRank = "ZREVRANK".ToByteArray();
         public static readonly byte[] ZRange = "ZRANGE".ToByteArray();
         public static readonly byte[] ZRevRange = "ZREVRANGE".ToByteArray();
+        public static readonly byte[] ZRevRangeByLex = "ZREVRANGEBYLEX".ToByteArray();
         public static readonly byte[] ZRangeByScore = "ZRANGEBYSCORE".ToByteArray();
         public static readonly byte[] ZRevRangeByScore = "ZREVRANGEBYSCORE".ToByteArray();
         public static readonly byte[] ZCard = "ZCARD".ToByteArray();

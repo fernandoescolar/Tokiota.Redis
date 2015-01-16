@@ -23,6 +23,8 @@ namespace Tokiota.Redis
 
         public IRedisSetsCommands Sets { get { return this.wrappedClient.Sets; } }
 
+        public IRedisSortedSetsCommands SortedSets { get { return this.wrappedClient.SortedSets; } }
+
         protected override void OnReleaseResources()
         {
             this.wrappedClient.Dispose();

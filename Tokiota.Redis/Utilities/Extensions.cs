@@ -10,7 +10,7 @@ namespace Tokiota.Redis.Utilities
         public static byte[] ToByteArray(this string str)
         {
             var numArray = new byte[str.Length];
-            for (var index = 0; index < str.Length; ++index)
+            for (var index = 0; index < str.Length; index++)
             {
                 numArray[index] = (byte)str[index];
             }
@@ -37,8 +37,35 @@ namespace Tokiota.Redis.Utilities
         public static byte[][] ToByteArrays(this string[] strs)
         {
             var bArray = new byte[strs.Length][];
-            for (int index = 0; index < strs.Length; ++index)
+            for (int index = 0; index < strs.Length; index++)
                 bArray[index] = strs[index].ToByteArray();
+
+            return bArray;
+        }
+
+        public static byte[][] ToByteArrays(this long[] numbers)
+        {
+            var bArray = new byte[numbers.Length][];
+            for (int index = 0; index < numbers.Length; index++)
+                bArray[index] = numbers[index].ToByteArray();
+
+            return bArray;
+        }
+
+        public static byte[][] ToByteArrays(this int[] numbers)
+        {
+            var bArray = new byte[numbers.Length][];
+            for (int index = 0; index < numbers.Length; index++)
+                bArray[index] = numbers[index].ToByteArray();
+
+            return bArray;
+        }
+
+        public static byte[][] ToByteArrays(this double[] numbers)
+        {
+            var bArray = new byte[numbers.Length][];
+            for (int index = 0; index < numbers.Length; index++)
+                bArray[index] = numbers[index].ToByteArray();
 
             return bArray;
         }
@@ -51,7 +78,7 @@ namespace Tokiota.Redis.Utilities
         public static string[] ToUtf8Strings(this byte[][] bytes)
         {
             var strArray = new string[bytes.Length];
-            for (int index = 0; index < bytes.Length; ++index)
+            for (int index = 0; index < bytes.Length; index++)
                 strArray[index] = bytes[index].ToUtf8String();
 
             return strArray;
@@ -61,8 +88,19 @@ namespace Tokiota.Redis.Utilities
         {
             var numArray = new byte[1 + args.Length][];
             numArray[0] = cmd;
-            for (int index = 0; index < args.Length; ++index)
+            for (int index = 0; index < args.Length; index++)
                 numArray[index + 1] = args[index];
+
+            return numArray;
+        }
+
+        public static byte[][] Merge(this byte[] cmd, byte[] arg, params byte[][] args)
+        {
+            var numArray = new byte[2 + args.Length][];
+            numArray[0] = cmd;
+            numArray[1] = arg;
+            for (int index = 0; index < args.Length; index++)
+                numArray[index + 2] = args[index];
 
             return numArray;
         }
@@ -89,7 +127,7 @@ namespace Tokiota.Redis.Utilities
         {
             var numArray = new byte[1 + args.Length][];
             numArray[0] = cmd;
-            for (int index = 0; index < args.Length; ++index)
+            for (int index = 0; index < args.Length; index++)
                 numArray[index + 1] = args[index].ToByteArray();
 
             return numArray;

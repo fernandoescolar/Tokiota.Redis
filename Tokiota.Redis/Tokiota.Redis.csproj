@@ -42,6 +42,8 @@
     <Compile Include="IRedisStringsCommands.cs" />
     <Compile Include="IRedisConnection.cs" />
     <Compile Include="PooledRedisClient.cs" />
+    <Compile Include="IRedisSortedSetsCommands.cs" />
+    <Compile Include="Protocol\SortedSetsCommands.cs" />
     <Compile Include="RedisClientFactory.cs" />
     <Compile Include="RedisConnection.cs" />
     <Compile Include="Net\RedisNetworkStream.cs" />

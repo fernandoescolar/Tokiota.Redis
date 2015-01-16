@@ -15,6 +15,7 @@ namespace Tokiota.Redis
         private IRedisHashesCommands hashes;
         private IRedisListsCommands lists;
         private IRedisSetsCommands sets;
+        private IRedisSortedSetsCommands sortedSets;
 
         public RedisClient(RedisEndpoint endpoint)
             : this(endpoint, new RedisConnection(endpoint.Host, endpoint.Port, endpoint.UseSsl, endpoint.Timeout))
@@ -77,6 +78,11 @@ namespace Tokiota.Redis
         public IRedisSetsCommands Sets
         {
             get { return this.sets ?? (this.sets = new SetsCommands(this.connection)); }
+        }
+
+        public IRedisSortedSetsCommands SortedSets
+        {
+            get { return this.sortedSets ?? (this.sortedSets = new SortedSetsCommands(this.connection)); }
         }
 
         public void Dispose()
