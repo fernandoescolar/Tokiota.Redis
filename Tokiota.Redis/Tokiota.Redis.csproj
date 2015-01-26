@@ -78,7 +78,6 @@
     <Compile Include="Protocol\StringsCommands.cs" />
     <Compile Include="RedisClient.cs" />
     <Compile Include="RedisEndpoint.cs" />
-    <Compile Include="Utilities\BlockingQueue.cs" />
     <Compile Include="Utilities\PooledByteBuffer.cs" />
     <Compile Include="Utilities\Extensions.cs" />
     <Compile Include="Utilities\Pool.cs" />
