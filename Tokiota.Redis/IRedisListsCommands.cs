@@ -19,6 +19,7 @@ namespace Tokiota.Redis
         long LPushX(string key, byte[] value);
         long LPushX(string key, string value);
         byte[][] LRange(string key, int start, int stop);
+        string[] LRangeString(string key, int start, int stop);
         long LRem(string key, int count, byte[] value);
         long LRem(string key, int count, string value);
         void LSet(string key, int index, byte[] value);

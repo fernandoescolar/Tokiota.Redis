@@ -72,6 +72,8 @@ namespace Tokiota.Redis.Utilities
 
         public static string ToUtf8String(this byte[] bytes)
         {
+            if (bytes == null) return null;
+
             return Encoding.UTF8.GetString(bytes, 0, bytes.Length);
         }
 

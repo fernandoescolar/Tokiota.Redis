@@ -119,7 +119,6 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.LPush, key.ToByteArray(), value.ToByteArray());
         }
 
-
         public long LPushX(string key, byte[] value)
         {
             if (key == null)
@@ -150,6 +149,11 @@ namespace Tokiota.Redis.Protocol
                 throw new ArgumentNullException("key");
 
             return this.Connection.SendExpectMultiData(Commands.LRange, key.ToByteArray(), start.ToByteArray(), stop.ToByteArray());
+        }
+
+        public string[] LRangeString(string key, int start, int stop)
+        {
+            return this.LRange(key, start, stop).ToUtf8Strings();
         }
 
         public long LRem(string key, int count, byte[] value)
@@ -227,7 +231,6 @@ namespace Tokiota.Redis.Protocol
 
             return this.Connection.SendExpectData(Commands.RPopLPush, source.ToByteArray(), target.ToByteArray()).ToUtf8String();
         }
-
 
         public long RPush(string key, byte[][] values)
         {

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Tokiota.Redis
 {
@@ -13,6 +15,8 @@ namespace Tokiota.Redis
         byte[] HGet(string key, byte[] field);
         byte[] HGet(string key, string field);
         byte[][] HGetAll(string key);
+        Hashtable HGetAllHashtable(string key);
+        Dictionary<string, string> HGetAllDictionary(string key);
         string HGetString(string key, string field);
         long HIncrBy(string key, byte[] field, int increment);
         long HIncrBy(string key, byte[] field, long increment);
@@ -26,6 +30,8 @@ namespace Tokiota.Redis
         void HMSet(string key, byte[][] fields, byte[][] values);
         void HMSet(string key, string[] fields, byte[][] values);
         void HMSet(string key, string[] fields, string[] values);
+        void HMSet(string key, Hashtable values);
+        void HMSet(string key, Dictionary<string, string> values);
         byte[] HScan(string key, ulong cursor, int count = 10, string match = null);
         long HSet(string key, byte[] field, byte[] value);
         long HSet(string key, string field, byte[] value);

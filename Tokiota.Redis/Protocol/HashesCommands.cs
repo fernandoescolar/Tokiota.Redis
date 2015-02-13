@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using Tokiota.Redis.Net;
 using Tokiota.Redis.Utilities;
 
@@ -110,6 +113,46 @@ namespace Tokiota.Redis.Protocol
                 throw new ArgumentNullException("key");
 
             return this.Connection.SendExpectMultiData(Commands.HGetAll, key.ToByteArray());
+        }
+
+        public Hashtable HGetAllHashtable(string key)
+        {
+            var result = new Hashtable();
+            string lastKey = null;
+            foreach (var value in this.HGetAll(key).ToUtf8Strings())
+            {
+                if (lastKey == null)
+                {
+                    lastKey = value;
+                }
+                else
+                {
+                    result[lastKey] = value;
+                    lastKey = null;
+                }
+            }
+
+            return result;
+        }
+
+        public Dictionary<string, string> HGetAllDictionary(string key)
+        {
+            var result = new Dictionary<string, string>();
+            string lastKey = null;
+            foreach (var value in this.HGetAll(key).ToUtf8Strings())
+            {
+                if (lastKey == null)
+                {
+                    lastKey = value;
+                }
+                else
+                {
+                    result[lastKey] = value;
+                    lastKey = null;
+                }
+            }
+
+            return result;
         }
 
         public long HIncrBy(string key, byte[] field, int increment)
@@ -248,6 +291,14 @@ namespace Tokiota.Redis.Protocol
                 throw new ArgumentNullException("values");
 
             this.Connection.SendExpectSuccess(Commands.HMSet.Merge(key.ToByteArray().Combine(fields.ToByteArrays(), values.ToByteArrays())));
+        }
+        public void HMSet(string key, Hashtable values)
+        {
+            this.HMSet(key, values.Keys.Cast<object>().Select(o => o.ToString()).ToArray(), values.Values.Cast<object>().Select(o => o.ToString()).ToArray());
+        }
+        public void HMSet(string key, Dictionary<string, string> values)
+        {
+            this.HMSet(key, values.Keys.ToArray(), values.Values.ToArray());
         }
 
         public long HSet(string key, byte[] field, byte[] value)
