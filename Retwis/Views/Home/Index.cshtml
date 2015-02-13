@@ -24,7 +24,7 @@
 <div class="rightlink">
     @if (Model.Prev >= 0)
     {
-        <a href="@Url.Action("Index", new { start = Model.Prev })">Older posts &raquo;</a> @(Model.Next > 0 ? " | " : "")
+        <a href="@Url.Action("Index", new { start = Model.Prev })">&laquo; Newer posts</a> @(Model.Next > 0 ? " | " : "")
     }
     @if (Model.Next > 0)
     {
