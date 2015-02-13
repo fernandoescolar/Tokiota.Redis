@@ -1,6 +1,7 @@
 ﻿using Retwis.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Tokiota.Redis;
 
@@ -135,6 +136,8 @@ namespace Retwis.Managers
             if (string.IsNullOrEmpty(message))
                 throw new ArgumentNullException("message");
 
+
+            var culture = new CultureInfo("en-US");
             using (var redis = RedisManager.Current.GetClient())
             {
                 var postId = redis.Strings.Incr("next_post_id");
@@ -142,7 +145,7 @@ namespace Retwis.Managers
 
                 redis.Hashes.HMSet("post:" + postId, new Dictionary<string, string> { 
                     { "userid", userId },
-                    { "time", DateTime.Now.ToString() },
+                    { "time", DateTime.Now.ToString(culture.DateTimeFormat) },
                     { "message", message }
                 });
 
@@ -197,13 +200,14 @@ namespace Retwis.Managers
             if (post == null || post.Count == 0)
                 throw new Exception("Post not found");
 
+            var culture = new CultureInfo("en-US");
             var userId = post["userid"] as string;
             return new Post
             {
                 Id = postId,
                 UserId = userId,
                 Username = redis.Hashes.HGetString("user:" + userId, "username"),
-                Time = DateTime.Parse(post["time"] as string),
+                Time = DateTime.Parse(post["time"] as string, culture.DateTimeFormat),
                 Message = post["message"] as string
             };
         }
