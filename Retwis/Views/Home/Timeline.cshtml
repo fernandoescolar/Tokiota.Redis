@@ -1,0 +1,29 @@
+﻿@model Retwis.Models.TimelineViewModel
+<h2>Timeline</h2>
+<i>Latest registered users (an example of sorted sets)</i><br>
+<div>
+    @foreach (var user in Model.LastUsers)
+    {
+        <a class="username" href="@Url.Action("Profile", new { username = user.Username })">@user.Username</a>
+    }
+</div>
+<br>
+<i>Latest 50 messages from users aroud the world!</i><br>
+@foreach (var post in Model.Posts)
+{
+    <div class="post">
+        <a class="username" href="@Url.Action("Profile", new { username = post.Username })">@post.Username</a>
+        @post.Message<br>
+        <i>posted: @(DateTime.Now - post.Time) ago via web</i>
+    </div>
+}
+<div class="rightlink">
+    @if (Model.Prev >= 0)
+    {
+        <a href="@Url.Action("Index", new { start = Model.Prev })">Older posts &raquo;</a> @(Model.Next > 0 ? " | " : "")
+    }
+    @if (Model.Next > 0)
+    {
+        <a href="@Url.Action("Index", new { start = Model.Next })">Older posts &raquo;</a>
+    }
+</div>

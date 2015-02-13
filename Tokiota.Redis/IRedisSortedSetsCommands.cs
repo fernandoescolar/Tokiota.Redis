@@ -60,9 +60,8 @@
         long ZRevRank(string key, byte[] member);
         long ZRevRank(string key, string member);
         byte[][] ZScan(string key, ulong cursor, int count = 10, string match = null);
-        double ZScore(string key, byte[] member);
-        long ZScore(string key, string member);
-        double ZScoreDouble(string key, string member);
+        string ZScore(string key, byte[] member);
+        string ZScore(string key, string member);
         long ZUnionStore(string intoKey, params string[] withKeys);
     }
 }

@@ -1,0 +1,9 @@
+﻿<div id="navbar">
+    <a href="@Url.Action("Index", "Home")">home</a>
+    | <a href="@Url.Action("Timeline", "Home")">timeline</a>
+    @if(User.Identity.IsAuthenticated)
+    {
+    <text>| <a href="@Url.Action("Logout", "Account")">logout</a></text>
+    }
+</div>
+

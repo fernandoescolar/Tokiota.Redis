@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tokiota.Redis", "Tokiota.Re
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tokiota.Redis.Console", "Tokiota.Redis.Console\Tokiota.Redis.Console.csproj", "{6A1DE36F-599E-4F0D-8B6C-42E392504403}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Retwis", "Retwis\Retwis.csproj", "{75BAF654-091C-44BA-843C-43F80F7B4904}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6A1DE36F-599E-4F0D-8B6C-42E392504403}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6A1DE36F-599E-4F0D-8B6C-42E392504403}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6A1DE36F-599E-4F0D-8B6C-42E392504403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75BAF654-091C-44BA-843C-43F80F7B4904}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75BAF654-091C-44BA-843C-43F80F7B4904}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75BAF654-091C-44BA-843C-43F80F7B4904}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75BAF654-091C-44BA-843C-43F80F7B4904}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

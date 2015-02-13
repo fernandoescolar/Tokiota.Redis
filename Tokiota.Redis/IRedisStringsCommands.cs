@@ -30,6 +30,7 @@ namespace Tokiota.Redis
         void Set(string key, byte[] value);
         void Set(string key, byte[] value, int expirySeconds, long expiryMilliseconds = 0L);
         void Set(string key, string value);
+        void Set(string key, string value, int expirySeconds, long expiryMilliseconds = 0L);
         long SetBit(string key, int offset, int value);
         void SetEx(string key, int seconds, byte[] value);
         void SetEx(string key, int seconds, string value);

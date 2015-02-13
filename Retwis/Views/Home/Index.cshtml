@@ -1,0 +1,33 @@
+﻿@model Retwis.Models.HomeViewModel
+<div id="postform">
+    <form method="POST" action="@Url.Action("Post")">
+        @User.Identity.Name, what you are doing?
+        <br>
+        <table>
+            <tr><td><textarea cols="70" rows="3" name="message"></textarea></td></tr>
+            <tr><td align="right"><input type="submit" name="doit" value="Update"></td></tr>
+        </table>
+    </form>
+    <div id="homeinfobox">
+        @Model.Followers followers<br>
+        @Model.Following following<br>
+    </div>
+</div>
+@foreach (var post in Model.Posts)
+{
+    <div class="post">
+        <a class="username" href="@Url.Action("Profile", new { username = post.Username })">@post.Username</a>
+        @post.Message<br>
+        <i>posted: @(DateTime.Now - post.Time) ago via web</i>
+    </div>
+}
+<div class="rightlink">
+    @if (Model.Prev >= 0)
+    {
+        <a href="@Url.Action("Index", new { start = Model.Prev })">Older posts &raquo;</a> @(Model.Next > 0 ? " | " : "")
+    }
+    @if (Model.Next > 0)
+    {
+        <a href="@Url.Action("Index", new { start = Model.Next })">Older posts &raquo;</a>
+    }
+</div>

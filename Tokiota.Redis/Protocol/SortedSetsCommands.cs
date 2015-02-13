@@ -666,7 +666,7 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.ZRevRank, key.ToByteArray(), member.ToByteArray());
         }
 
-        public double ZScore(string key, byte[] member)
+        public string ZScore(string key, byte[] member)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
@@ -674,10 +674,10 @@ namespace Tokiota.Redis.Protocol
             if (member == null)
                 throw new ArgumentNullException("member");
 
-            return this.Connection.SendExpectDouble(Commands.ZScore, key.ToByteArray(), member);
+            return this.Connection.SendExpectData(Commands.ZScore, key.ToByteArray(), member).ToUtf8String();
         }
 
-        public double ZScoreDouble(string key, string member)
+        public string ZScore(string key, string member)
         {
             if (key == null)
                 throw new ArgumentNullException("key");
@@ -685,18 +685,7 @@ namespace Tokiota.Redis.Protocol
             if (member == null)
                 throw new ArgumentNullException("member");
 
-            return this.Connection.SendExpectDouble(Commands.ZScore, key.ToByteArray(), member.ToByteArray());
-        }
-
-        public long ZScore(string key, string member)
-        {
-            if (key == null)
-                throw new ArgumentNullException("key");
-
-            if (member == null)
-                throw new ArgumentNullException("member");
-
-            return this.Connection.SendExpectLong(Commands.ZScore, key.ToByteArray(), member.ToByteArray());
+            return this.Connection.SendExpectData(Commands.ZScore, key.ToByteArray(), member.ToByteArray()).ToUtf8String();
         }
 
         public long ZUnionStore(string intoKey, params string[] withKeys)

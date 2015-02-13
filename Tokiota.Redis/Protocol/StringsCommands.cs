@@ -265,6 +265,11 @@ namespace Tokiota.Redis.Protocol
                 this.Connection.SendExpectSuccess(Commands.Set, key.ToByteArray(), value);
         }
 
+        public void Set(string key, string value, int expirySeconds, long expiryMilliseconds = 0L)
+        {
+            this.Set(key, value.ToByteArray(), expirySeconds, expiryMilliseconds);
+        }
+
         public long SetBit(string key, int offset, int value)
         {
             if (key == null)

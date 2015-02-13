@@ -68,7 +68,7 @@ namespace Tokiota.Redis.Console
                 {
                     System.Console.WriteLine("Error: could not send the command");
                 }
-                else if (line == "QUIT")
+                else if (line.ToUpper() == "QUIT")
                 {
                     break;
                 }
