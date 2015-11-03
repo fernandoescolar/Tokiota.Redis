@@ -12,7 +12,8 @@ var redis = new RedisClient("my.redis.cache.windows.net", 6380, "#password#");
 ```
 <p>Or using the client pool:</p>
 ```csharp
-IRedisClientFactory factory = new RedisClientFactory("my.redis.cache.windows.net", 6380, "#password#");
+//IRedisClientFactory factory = new RedisClientFactory("my.redis.cache.windows.net", 6380, "#password#");
+IRedisClientFactory factory = new RedisRelayClientFactory("my.redis.cache.windows.net", 6380, "#password#");
 using (var redis = factory.GetCurrent())
 {
    // do something
@@ -41,7 +42,7 @@ if (redis.Keys.Exists("my:key:2")
   redis.Keys.Expire("my:key:2", 120 /*seconds*/);
 }
 ```
-<p>Currently all the official keys commands (http://redis.io/commands/#generic) are working, except SORT and SCAN.</p>
+<p>Currently all the official keys commands (http://redis.io/commands/#generic) are working, except SORT.</p>
 <h3>Strings commands</h3>
 <p>You can access to the 'strings' commands using the Strings redis client property:</p>
 ```csharp
@@ -59,13 +60,13 @@ Console.WriteLine(redis.Strings.GetString("my:key:2"));
 ```
 <p>Currently all the official strings commands (http://redis.io/commands/#string) are working.</p>
 <h3>Hashes commands</h3>
-<p>Currently all the official keys commands (http://redis.io/commands/#hash) are working, except HSCAN.</p>
+<p>Currently all the official keys commands (http://redis.io/commands/#hash) are working.</p>
 <h3>Lists commands</h3>
 <p>Currently all the official keys commands (http://redis.io/commands/#list) are working.</p>
 <h3>Sets commands</h3>
-<p>Currently all the official keys commands (http://redis.io/commands/#set) are working, except SSCAN.</p>
+<p>Currently all the official keys commands (http://redis.io/commands/#set) are working.</p>
 <h3>Sorted Sets commands</h3>
-<p>Not implemented...</p>
+<p>Currently all the official keys commands (http://redis.io/commands#sorted_set) are working.</p>
 <h3>Transactions commands</h3>
 <p>Not implemented...</p>
 <h3>Scripting commands</h3>
@@ -77,7 +78,8 @@ Console.WriteLine(redis.Strings.GetString("my:key:2"));
 ```csharp
 public class RedisCache
 {
-  private static readonly IRedisClientFactory factory = new RedisClientFactory("my.redis.cache.windows.net", 6380, "#password#");
+  //private static readonly IRedisClientFactory factory = new RedisClientFactory("my.redis.cache.windows.net", 6380, "#password#");
+   private static readonly IRedisClientFactory factory = new RedisRelayClientFactory("my.redis.cache.windows.net", 6380, "#password#");
   
   public T Get<T>(string key)
   {
