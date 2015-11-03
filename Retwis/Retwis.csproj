@@ -105,7 +105,6 @@
     <Compile Include="Models\ProfileViewModel.cs" />
     <Compile Include="Models\HomeViewModel.cs" />
     <Compile Include="Models\Post.cs" />
-    <Compile Include="Managers\RedisExtensions.cs" />
     <Compile Include="Managers\RedisManager.cs" />
     <Compile Include="Managers\RetwisManager.cs" />
     <Compile Include="Models\TimelineViewModel.cs" />
@@ -144,6 +143,8 @@
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Home\Timeline.cshtml" />
     <Content Include="Views\Home\Profile.cshtml" />
+    <None Include="Properties\PublishProfiles\tokiotastore - FTP.pubxml" />
+    <None Include="Properties\PublishProfiles\tokiotastore - Web Deploy.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Tokiota.Redis\Tokiota.Redis.csproj">

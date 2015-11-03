@@ -1,12 +1,13 @@
-﻿using System;
-using System.IO;
-using System.Net.Security;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-
-namespace Tokiota.Redis.Net
+﻿namespace Tokiota.Redis.Net
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Net.Security;
+    using System.Net.Sockets;
+    using System.Text;
+    using System.Threading;
+
     internal class RedisSocket : IDisposable
     {
         private bool isAlive;
@@ -56,20 +57,26 @@ namespace Tokiota.Redis.Net
 
         ~RedisSocket()
         {
-            try { this.Dispose(true); }
-            catch { }
-        }
-
-        public int Available
-        {
-            get { return this.socket.Available; }
+            try 
+            { 
+                this.Dispose(true); 
+            }
+            catch (Exception ex)
+            {
+                Trace.TraceError("Error disposing RedisSocket: " + ex.Message);
+            }
         }
 
         public bool IsAlive
         {
             get { return this.isAlive; }
         }
-        
+
+        public bool Connected
+        {
+            get { return !((this.socket.Poll(1000, SelectMode.SelectRead) && (this.socket.Available == 0)) || !this.socket.Connected || !this.IsAlive); }
+        }
+
         public int ReadByte()
         {
             this.CheckDisposed();
@@ -165,7 +172,7 @@ namespace Tokiota.Redis.Net
                 {
                     if (socket != null)
                         try { this.socket.Close(); }
-                        catch { }
+                        catch (Exception ex) { Trace.TraceError("Error disposing RedisSocket: " + ex.Message); }
 
                     if (this.outputStream != null)
                         this.outputStream.Dispose();
@@ -176,8 +183,9 @@ namespace Tokiota.Redis.Net
                     this.inputStream = null;
                     this.socket = null;
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
+                    Trace.TraceError("Error disposing RedisSocket: " + ex.Message);
                 }
             }
         }
@@ -195,7 +203,7 @@ namespace Tokiota.Redis.Net
             socket.BeginConnect(host, port, iar =>
             {
                 try { using (iar.AsyncWaitHandle) socket.EndConnect(iar); }
-                catch { }
+                catch(Exception ex) { Trace.TraceError("Error connectiong RedisSocket: " + ex.Message); }
 
                 mre.Set();
             }, null);

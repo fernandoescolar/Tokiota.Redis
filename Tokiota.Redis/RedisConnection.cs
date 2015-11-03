@@ -1,10 +1,9 @@
-﻿using System;
-using Tokiota.Redis.Net;
-using Tokiota.Redis.Protocol;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using Net;
+    using Protocol;
+    using System;
+
     internal class RedisConnection : IRedisConnection
     {
         private static readonly IOperationFactory OperationFactory = new OperationFactory();
@@ -19,7 +18,7 @@ namespace Tokiota.Redis
             this.ReceiveTimeout = timeout;
         }
 
-        public bool Connected { get { return this.socket != null && this.socket.IsAlive; } }
+        public bool Connected { get { return this.socket != null && this.socket.Connected; } }
 
         public string Host { get; set; }
 
@@ -69,6 +68,12 @@ namespace Tokiota.Redis
         {
             this.CheckSocketStatus();
             return this.ExecuteOperation(OperationFactory.CreateMultiDataOperation(this.socket), commands);
+        }
+
+        public RedisScanResult SendExpectScanResult(params byte[][] commands)
+        {
+            this.CheckSocketStatus();
+            return this.ExecuteOperation(OperationFactory.CreateScanOperation(this.socket), commands);
         }
 
         public void Dispose()

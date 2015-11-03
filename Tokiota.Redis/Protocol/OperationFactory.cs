@@ -1,7 +1,7 @@
-﻿using Tokiota.Redis.Net;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using Net;
+
     internal class OperationFactory : IOperationFactory
     {
         private static readonly IResponseParser<bool> SuccessParser = new SuccessResponseParser();
@@ -10,6 +10,7 @@ namespace Tokiota.Redis.Protocol
         private static readonly IResponseParser<string> SimpleStringParser = new SimpleStringResponseParser();
         private static readonly IResponseParser<byte[]> BulkByteParser = new BulkByteResponseParser();
         private static readonly IResponseParser<byte[][]> BulkByteArrayParser = new BulkByteArrayResponseParser();
+        private static readonly IResponseParser<RedisScanResult> ScanResultParser = new ScanResultResponseParser();
 
         public IOperation<bool> CreateSuccessOperation(RedisSocket socket)
         {
@@ -39,6 +40,11 @@ namespace Tokiota.Redis.Protocol
         public IOperation<byte[][]> CreateMultiDataOperation(RedisSocket socket)
         {
             return new Operation<byte[][]>(socket, new OperationRequest(), new OperationResponse<byte[][]>(BulkByteArrayParser));
+        }
+
+        public IOperation<RedisScanResult> CreateScanOperation(RedisSocket socket)
+        {
+            return new Operation<RedisScanResult>(socket, new OperationRequest(), new OperationResponse<RedisScanResult>(ScanResultParser));
         }
     }
 }

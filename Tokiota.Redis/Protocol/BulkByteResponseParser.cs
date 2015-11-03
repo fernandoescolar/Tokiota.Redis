@@ -1,8 +1,8 @@
-﻿using System;
-using Tokiota.Redis.Net;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using Net;
+    using System;
+
     internal class BulkByteResponseParser : IResponseParser<byte[]>
     {
         public bool CheckExpetedHeader(int byteHeader)

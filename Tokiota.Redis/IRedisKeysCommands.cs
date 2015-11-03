@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using System;
+
     public interface IRedisKeysCommands
     {
         long Del(params string[] keys);
@@ -21,7 +21,9 @@ namespace Tokiota.Redis
         void Rename(string key, string newKey);
         bool RenameNx(string key, string newKey);
         byte[] Restore(string key, long ttl, byte[] value);
-        byte[] Scan(ulong cursor, int count = 10, string match = null);
+        RedisScanResult Scan(ulong cursor, int count = 10, string match = null);
+        byte[][] ScanLoop(int count = 10, string match = null);
+        string[] ScanLoopString(int count = 10, string match = null);
         byte[] Sort(string key, byte[][] args);
         long Ttl(string key);
         string Type(string key);

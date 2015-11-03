@@ -1,9 +1,8 @@
-﻿using System;
-using Tokiota.Redis.Net;
-using Tokiota.Redis.Protocol;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using Protocol;
+    using System;
+
     public class RedisClient : IRedisClient
     {
         private readonly IRedisConnection connection;

@@ -1,12 +1,12 @@
-﻿using Retwis.Models;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using Tokiota.Redis;
-
-namespace Retwis.Managers
+﻿namespace Retwis.Managers
 {
+    using Models;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using Tokiota.Redis;
+
     public class RetwisManager : IRetwisManager
     {
         public void Register(string username, string password)

@@ -1,9 +1,8 @@
-﻿using Retwis.Models;
-using System;
-using System.Collections.Generic;
-
-namespace Retwis.Managers
+﻿namespace Retwis.Managers
 {
+    using Models;
+    using System.Collections.Generic;
+
     public interface IRetwisManager
     {
         IEnumerable<User> GetLastUsers();

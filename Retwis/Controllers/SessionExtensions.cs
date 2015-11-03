@@ -1,10 +1,9 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using System.Web;
-using System.Web.SessionState;
-
-namespace Retwis.Controllers
+﻿namespace Retwis.Controllers
 {
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Web;
+
     public static class SessionExtensions
     {
         private const string UserIdName = "userid"; 

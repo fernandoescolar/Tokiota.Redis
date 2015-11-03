@@ -1,9 +1,9 @@
-﻿using System;
-using Tokiota.Redis.Net;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using Net;
+    using System;
+    using Utilities;
+
     internal class OperationRequest : IOperationRequest
     {
         private const int ReadBufferSize = 16 * 1024;

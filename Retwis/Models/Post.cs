@@ -1,6 +1,7 @@
-﻿using System;
-namespace Retwis.Models
+﻿namespace Retwis.Models
 {
+    using System;
+
     public class Post
     {
         public string Id { get; set; }

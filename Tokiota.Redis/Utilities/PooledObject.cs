@@ -1,8 +1,8 @@
-﻿using System;
-using System.Threading;
-
-namespace Tokiota.Redis.Utilities
+﻿namespace Tokiota.Redis.Utilities
 {
+    using System;
+    using System.Threading;
+
     internal abstract class PooledObject : IDisposable
     {
         internal Action<PooledObject, bool> ReturnToPool { get; set; }

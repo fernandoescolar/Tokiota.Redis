@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using System.Collections;
+    using System.Collections.Generic;
+
     public interface IRedisHashesCommands
     {
         long HDel(string key, byte[] field);
@@ -32,7 +31,9 @@ namespace Tokiota.Redis
         void HMSet(string key, string[] fields, string[] values);
         void HMSet(string key, Hashtable values);
         void HMSet(string key, Dictionary<string, string> values);
-        byte[] HScan(string key, ulong cursor, int count = 10, string match = null);
+        RedisScanResult HScan(string key, ulong cursor, int count = 10, string match = null);
+        byte[][] HScanLoop(string key, int count = 10, string match = null);
+        string[] HScanLoopString(string key, int count = 10, string match = null);
         long HSet(string key, byte[] field, byte[] value);
         long HSet(string key, string field, byte[] value);
         long HSet(string key, string field, string value);

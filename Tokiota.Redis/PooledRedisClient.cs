@@ -1,7 +1,7 @@
-﻿using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using Utilities;
+
     internal class PooledRedisClient : PooledObject, IRedisClient
     {
         private readonly IRedisClient wrappedClient;

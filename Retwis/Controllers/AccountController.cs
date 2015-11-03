@@ -1,9 +1,9 @@
-﻿using Retwis.Managers;
-using System;
-using System.Web.Mvc;
-
-namespace Retwis.Controllers
+﻿namespace Retwis.Controllers
 {
+    using Managers;
+    using System;
+    using System.Web.Mvc;
+
     public class AccountController : Controller
     {
         private readonly IRetwisManager retwis;

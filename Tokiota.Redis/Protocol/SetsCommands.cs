@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Tokiota.Redis.Net;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using System;
+    using System.Collections.Generic;
+    using Utilities;
+
     internal class SetsCommands : CommandsBase, IRedisSetsCommands
     {
         public SetsCommands(IRedisConnection conneciton) : base(conneciton)
@@ -289,9 +288,39 @@ namespace Tokiota.Redis.Protocol
             this.Connection.SendExpectSuccess(Commands.SUnionStore.Merge(intoKey.ToByteArray().Merge(keys)));
         }
 
-        public byte[][] SScan(string key, ulong cursor, int count = 10, string match = null)
+        public RedisScanResult SScan(string key, ulong cursor, int count = 10, string match = null)
         {
-            throw new NotImplementedException();
+
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            if (string.IsNullOrEmpty(match))
+                return this.Connection.SendExpectScanResult(Commands.SScan, key.ToByteArray(), cursor.ToString().ToByteArray(), Commands.Count, count.ToByteArray());
+
+            return this.Connection.SendExpectScanResult(Commands.SScan, key.ToByteArray(), cursor.ToString().ToByteArray(), Commands.Count, count.ToByteArray(), Commands.Match, match.ToByteArray());
+        }
+
+        public byte[][] SScanLoop(string key, int count = 10, string match = null)
+        {
+
+            var result = new byte[0][];
+            var data = new RedisScanResult(0, null);
+            do
+            {
+                data = this.SScan(key, data.NextPage, count, match);
+
+                var aux = new byte[result.Length + data.Data.Length][];
+                result.CopyTo(aux, 0);
+                data.Data.CopyTo(aux, result.Length);
+                result = aux;
+            } while (data.NextPage != 0);
+
+            return result;
+        }
+
+        public string[] SScanLoopString(string key, int count = 10, string match = null)
+        {
+            return this.SScanLoop(key, count, match).ToUtf8Strings();
         }
     }
 }

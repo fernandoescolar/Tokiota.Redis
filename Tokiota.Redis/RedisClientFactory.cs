@@ -1,15 +1,20 @@
-﻿using System;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using System;
+    using Utilities;
+
     public class RedisClientFactory : IRedisClientFactory
     {
         private const int DefaultMinNumberOfClients = 2;
         private const int DefaultMaxNumberOfClients = 6;
+        private const int DefaultPort = 6379;
+        private const int DefaultSslPort = 6380;
+        private const string DefaultHost = "localhost";
 
         private readonly Pool<PooledRedisClient> clientPool;
         private readonly RedisEndpoint endpoint;
+
+        internal Pool<PooledRedisClient> Pool { get { return clientPool; } }
 
         public RedisClientFactory()
             : this(DefaultMinNumberOfClients, DefaultMaxNumberOfClients)
@@ -17,17 +22,17 @@ namespace Tokiota.Redis
         }
 
         public RedisClientFactory(int minActiveClients, int maxActiveClients)
-            : this(minActiveClients, maxActiveClients, "localhost")
+            : this(minActiveClients, maxActiveClients, DefaultHost)
         {
         }
 
         public RedisClientFactory(string host)
-            : this(host, 6379)
+            : this(host, DefaultPort)
         {
         }
 
         public RedisClientFactory(int minActiveClients, int maxActiveClients, string host)
-            : this(minActiveClients, maxActiveClients, host, 6379)
+            : this(minActiveClients, maxActiveClients, host, DefaultPort)
         {
         }
 
@@ -47,7 +52,7 @@ namespace Tokiota.Redis
         }
 
         public RedisClientFactory(int minActiveClients, int maxActiveClients, string host, int port, string password)
-            : this(minActiveClients, maxActiveClients, new RedisEndpoint { Host = host, Port = port, Password = password, UseSsl = port != 6379, Timeout = TimeSpan.FromSeconds(30) })
+            : this(minActiveClients, maxActiveClients, new RedisEndpoint { Host = host, Port = port, Password = password, UseSsl = port == DefaultSslPort, Timeout = TimeSpan.FromSeconds(30) })
         {
         }
 
@@ -71,7 +76,7 @@ namespace Tokiota.Redis
             this.Dispose(false);
         }
 
-        public IRedisClient GetCurrent()
+        public virtual IRedisClient GetCurrent()
         {
             return this.clientPool.GetObject();
         }

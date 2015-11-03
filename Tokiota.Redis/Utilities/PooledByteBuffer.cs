@@ -1,8 +1,7 @@
-﻿using System;
-using System.IO;
-
-namespace Tokiota.Redis.Utilities
+﻿namespace Tokiota.Redis.Utilities
 {
+    using System.IO;
+
     internal sealed class PooledByteBuffer : PooledObject
     {
         private const int DefaultBufferSize = 2 * 1024 * 1024; //2Mb

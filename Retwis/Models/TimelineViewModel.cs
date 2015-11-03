@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace Retwis.Models
+﻿namespace Retwis.Models
 {
+    using System.Collections.Generic;
+
     public class TimelineViewModel
     {
         public IEnumerable<User> LastUsers { get; set; }

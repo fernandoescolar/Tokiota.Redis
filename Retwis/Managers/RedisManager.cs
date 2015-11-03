@@ -1,8 +1,8 @@
-﻿using System.Configuration;
-using Tokiota.Redis;
-
-namespace Retwis.Managers
+﻿namespace Retwis.Managers
 {
+    using System.Configuration;
+    using Tokiota.Redis;
+
     public class RedisManager
     {
         private static RedisManager currentInstace;
@@ -11,7 +11,7 @@ namespace Retwis.Managers
         {
             get 
             {
-                if (currentInstace == null) currentInstace = new RedisManager(new RedisClientFactory(ConfigurationManager.AppSettings["Redis.Host"], int.Parse(ConfigurationManager.AppSettings["Redis.Port"]), ConfigurationManager.AppSettings["Redis.Password"]));
+                if (currentInstace == null) currentInstace = new RedisManager(new RedisRelayClientFactory(ConfigurationManager.AppSettings["Redis.Host"], int.Parse(ConfigurationManager.AppSettings["Redis.Port"]), ConfigurationManager.AppSettings["Redis.Password"]));
                 return currentInstace;
             }
         }

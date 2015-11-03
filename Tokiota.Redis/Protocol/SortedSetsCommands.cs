@@ -1,8 +1,8 @@
-﻿using System;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using System;
+    using Utilities;
+
     internal class SortedSetsCommands : CommandsBase, IRedisSortedSetsCommands
     {
         public SortedSetsCommands(IRedisConnection connection)
@@ -703,9 +703,39 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectLong(Commands.ZUnionStore.Merge(intoKey.ToByteArray(), withKeys.ToByteArrays()));
         }
 
-        public byte[][] ZScan(string key, ulong cursor, int count = 10, string match = null)
+        public RedisScanResult ZScan(string key, ulong cursor, int count = 10, string match = null)
         {
-            throw new NotImplementedException();
+
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            if (string.IsNullOrEmpty(match))
+                return this.Connection.SendExpectScanResult(Commands.ZScan, key.ToByteArray(), cursor.ToString().ToByteArray(), Commands.Count, count.ToByteArray());
+
+            return this.Connection.SendExpectScanResult(Commands.ZScan, key.ToByteArray(), cursor.ToString().ToByteArray(), Commands.Count, count.ToByteArray(), Commands.Match, match.ToByteArray());
+        }
+
+        public byte[][] ZScanLoop(string key, int count = 10, string match = null)
+        {
+
+            var result = new byte[0][];
+            var data = new RedisScanResult(0, null);
+            do
+            {
+                data = this.ZScan(key, data.NextPage, count, match);
+
+                var aux = new byte[result.Length + data.Data.Length][];
+                result.CopyTo(aux, 0);
+                data.Data.CopyTo(aux, result.Length);
+                result = aux;
+            } while (data.NextPage != 0);
+
+            return result;
+        }
+
+        public string[] ZScanLoopString(string key, int count = 10, string match = null)
+        {
+            return this.ZScanLoop(key, count, match).ToUtf8Strings();
         }
     }
 }

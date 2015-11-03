@@ -1,7 +1,7 @@
-﻿using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using Utilities;
+
     internal class Commands
     {
         public static readonly byte[] Quit = "QUIT".ToByteArray();

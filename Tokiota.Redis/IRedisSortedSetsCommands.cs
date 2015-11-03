@@ -59,7 +59,9 @@
         string[] ZRevRangeString(string key, int start, int stop, bool withScores);
         long ZRevRank(string key, byte[] member);
         long ZRevRank(string key, string member);
-        byte[][] ZScan(string key, ulong cursor, int count = 10, string match = null);
+        RedisScanResult ZScan(string key, ulong cursor, int count = 10, string match = null);
+        byte[][] ZScanLoop(string key, int count = 10, string match = null);
+        string[] ZScanLoopString(string key, int count = 10, string match = null);
         string ZScore(string key, byte[] member);
         string ZScore(string key, string member);
         long ZUnionStore(string intoKey, params string[] withKeys);

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Globalization;
-using Tokiota.Redis.Net;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using Net;
+    using System;
+    using System.Globalization;
+
     internal class DoubleResponseParser : IResponseParser<double>
     {
         public bool CheckExpetedHeader(int byteHeader)

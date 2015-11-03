@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using System;
+
     public interface IRedisConnectionCommands
     {
         void Auth(string password);

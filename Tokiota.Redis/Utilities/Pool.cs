@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Threading;
-
-namespace Tokiota.Redis.Utilities
+﻿namespace Tokiota.Redis.Utilities
 {
+    using System;
+    using System.Collections.Concurrent;
+    using System.Threading;
+
     internal class Pool<T> : IDisposable where T : PooledObject 
     {
         private const int DefaultPoolMinimumSize = 5;

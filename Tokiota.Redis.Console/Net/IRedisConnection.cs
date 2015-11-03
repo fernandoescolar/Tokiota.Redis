@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Tokiota.Redis.Console.Net
+﻿namespace Tokiota.Redis.Console.Net
 {
+    using System;
+
     internal interface IRedisConnection : IDisposable
     {
         bool Connected { get; }

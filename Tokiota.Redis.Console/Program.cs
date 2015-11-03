@@ -1,9 +1,9 @@
-﻿using System;
-using System.Configuration;
-using Tokiota.Redis.Console.Net;
-
-namespace Tokiota.Redis.Console
+﻿namespace Tokiota.Redis.Console
 {
+    using Net;
+    using System;
+    using System.Configuration;
+
     class Program
     {
         static void Main(string[] args)

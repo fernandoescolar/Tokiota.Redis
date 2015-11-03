@@ -1,6 +1,4 @@
-﻿using Tokiota.Redis.Net;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
     internal class CommandsBase
     {

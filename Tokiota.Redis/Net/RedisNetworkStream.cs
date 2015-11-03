@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Net.Sockets;
-
-namespace Tokiota.Redis.Net
+﻿namespace Tokiota.Redis.Net
 {
+    using System;
+    using System.IO;
+    using System.Net.Sockets;
+
     internal class RedisNetworkStream : Stream
     {
         private readonly Socket socket;

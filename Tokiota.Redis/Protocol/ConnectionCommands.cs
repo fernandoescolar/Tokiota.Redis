@@ -1,10 +1,11 @@
-﻿using Tokiota.Redis.Net;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using Utilities;
+
     internal class ConnectionCommands : CommandsBase, IRedisConnectionCommands
     {
+        private const string PingResponse = "PONG";
+
         public ConnectionCommands(IRedisConnection connection) : base(connection)
         {
         }
@@ -24,7 +25,7 @@ namespace Tokiota.Redis.Protocol
 
         public bool Ping()
         {
-            return this.Connection.SendExpectString(Commands.Ping) == "PONG";
+            return this.Connection.SendExpectString(Commands.Ping) == PingResponse;
         }
 
         public void Quit()

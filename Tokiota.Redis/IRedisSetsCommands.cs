@@ -1,6 +1,7 @@
-﻿using System;
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using System;
+
     public interface IRedisSetsCommands
     {
         long SAdd(string key, byte[] member);
@@ -28,7 +29,9 @@ namespace Tokiota.Redis
         string[] SRandMemberString(string key, int count);
         long SRem(string key, byte[][] members);
         long SRem(string key, string[] members);
-        byte[][] SScan(string key, ulong cursor, int count = 10, string match = null);
+        RedisScanResult SScan(string key, ulong cursor, int count = 10, string match = null);
+        byte[][] SScanLoop(string key, int count = 10, string match = null);
+        string[] SScanLoopString(string key, int count = 10, string match = null);
         byte[][] SUnion(params string[] keys);
         void SUnionStore(string intoKey, params string[] keys);
         string[] SUnionStrings(params string[] keys);

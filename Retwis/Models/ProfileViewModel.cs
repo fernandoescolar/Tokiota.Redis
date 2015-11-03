@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Retwis.Models
+﻿namespace Retwis.Models
 {
+    using System.Collections.Generic;
+
     public class ProfileViewModel
     {
         public string UserId { get; set; }

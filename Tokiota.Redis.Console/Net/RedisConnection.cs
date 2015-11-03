@@ -1,14 +1,13 @@
-﻿using System;
-using System.Globalization;
-using System.IO;
-using System.Net.Security;
-using System.Net.Sockets;
-using System.Text;
-using System.Threading;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis.Console.Net
+﻿namespace Tokiota.Redis.Console.Net
 {
+    using System;
+    using System.Diagnostics;
+    using System.IO;
+    using System.Net.Security;
+    using System.Net.Sockets;
+    using System.Text;
+    using Utilities;
+
     internal class RedisConnection : IRedisConnection
     {
         private const int BufferSize = 16 * 1024;
@@ -83,6 +82,7 @@ namespace Tokiota.Redis.Console.Net
                 this.OnDisconnecting();
                 this.socket.Close();
                 this.outBuffer.Dispose();
+                this.inBuffer.Dispose();
                 this.socket = null;
                 this.socketStream.Dispose();
                 this.socketStream = null;
@@ -186,8 +186,9 @@ namespace Tokiota.Redis.Console.Net
                         this.BeginReceive();
                     }
                 }
-                catch (IOException)
+                catch (IOException ex)
                 {
+                    Trace.TraceError("Error receiving in RedisConnection: " + ex.Message);
                 }
             }
 

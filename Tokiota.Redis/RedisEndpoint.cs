@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using System;
+
     public class RedisEndpoint
     {
         public string Host { get; set; }

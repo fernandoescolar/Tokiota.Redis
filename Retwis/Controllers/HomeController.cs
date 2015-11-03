@@ -1,10 +1,10 @@
-﻿using Retwis.Managers;
-using Retwis.Models;
-using System.Web.Mvc;
-using System.Linq;
-
-namespace Retwis.Controllers
+﻿namespace Retwis.Controllers
 {
+    using Managers;
+    using Models;
+    using System.Linq;
+    using System.Web.Mvc;
+
     public class HomeController : Controller
     {
         private readonly IRetwisManager retwis;
@@ -56,7 +56,7 @@ namespace Retwis.Controllers
             return View(model);
         }
 
-        public ActionResult Profile(string username, int start = 0)
+        public new ActionResult Profile(string username, int start = 0)
         {
             var userId = this.retwis.GetUserId(username);
             var userInfo = this.retwis.GetUserInfo(userId);

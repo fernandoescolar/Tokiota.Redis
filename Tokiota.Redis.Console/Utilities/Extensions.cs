@@ -1,7 +1,7 @@
-﻿using System.Text;
-
-namespace Tokiota.Redis.Utilities
+﻿namespace Tokiota.Redis.Utilities
 {
+    using System.Text;
+
     internal static class Extensions
     {
         public static byte[] ToByteArray(this string str)

@@ -1,5 +1,4 @@
-﻿
-namespace Retwis.Models
+﻿namespace Retwis.Models
 {
     public class UserInfo
     {

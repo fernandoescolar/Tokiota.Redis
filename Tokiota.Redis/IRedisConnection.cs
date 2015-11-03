@@ -1,7 +1,7 @@
-﻿using System;
-
-namespace Tokiota.Redis
+﻿namespace Tokiota.Redis
 {
+    using System;
+
     internal interface IRedisConnection : IDisposable
     {
         bool Connected { get; }
@@ -31,5 +31,7 @@ namespace Tokiota.Redis
         byte[] SendExpectData(params byte[][] commands);
 
         byte[][] SendExpectMultiData(params byte[][] commands);
+
+        RedisScanResult SendExpectScanResult(params byte[][] commands);
     }
 }

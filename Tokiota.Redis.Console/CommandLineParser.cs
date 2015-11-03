@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Tokiota.Redis.Console
+﻿namespace Tokiota.Redis.Console
 {
+    using System.Collections.Generic;
+
     internal class CommandLineParser
     {
         public static string[] Parse(string line)

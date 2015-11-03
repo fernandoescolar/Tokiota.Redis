@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Tokiota.Redis.Net;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using Utilities;
+
     internal class HashesCommands : CommandsBase, IRedisHashesCommands
     {
         public HashesCommands(IRedisConnection connection) : base(connection)
@@ -389,9 +388,39 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectMultiData(Commands.HVals, key.ToByteArray()).ToUtf8Strings();
         }
 
-        public byte[] HScan(string key, ulong cursor, int count = 10, string match = null)
+        public RedisScanResult HScan(string key, ulong cursor, int count = 10, string match = null)
         {
-            throw new NotImplementedException();
+
+            if (key == null)
+                throw new ArgumentNullException("key");
+
+            if (string.IsNullOrEmpty(match))
+                return this.Connection.SendExpectScanResult(Commands.HScan, key.ToByteArray(), cursor.ToString().ToByteArray(), Commands.Count, count.ToByteArray());
+
+            return this.Connection.SendExpectScanResult(Commands.HScan, key.ToByteArray(), cursor.ToString().ToByteArray(), Commands.Count, count.ToByteArray(), Commands.Match, match.ToByteArray());
+        }
+
+        public byte[][] HScanLoop(string key, int count = 10, string match = null)
+        {
+
+            var result = new byte[0][];
+            var data = new RedisScanResult(0, null);
+            do
+            {
+                data = this.HScan(key, data.NextPage, count, match);
+
+                var aux = new byte[result.Length + data.Data.Length][];
+                result.CopyTo(aux, 0);
+                data.Data.CopyTo(aux, result.Length);
+                result = aux;
+            } while (data.NextPage != 0);
+
+            return result;
+        }
+
+        public string[] HScanLoopString(string key, int count = 10, string match = null)
+        {
+            return this.HScanLoop(key, count, match).ToUtf8Strings();
         }
     }
 }

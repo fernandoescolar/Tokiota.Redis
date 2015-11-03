@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-
-namespace Retwis.Models
+﻿namespace Retwis.Models
 {
+    using System.Collections.Generic;
+
     public class HomeViewModel
     {
         public int Followers { get; set; }

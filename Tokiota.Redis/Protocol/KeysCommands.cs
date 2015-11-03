@@ -1,8 +1,8 @@
-﻿using System;
-using Tokiota.Redis.Utilities;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using System;
+    using Utilities;
+
     internal class KeysCommands : CommandsBase, IRedisKeysCommands
     {
         public KeysCommands(IRedisConnection connection) : base(connection)
@@ -178,9 +178,34 @@ namespace Tokiota.Redis.Protocol
             return this.Connection.SendExpectData(Commands.Type, key.ToByteArray()).ToUtf8String();
         }
 
-        public byte[] Scan(ulong cursor, int count = 10, string match = null)
+        public RedisScanResult Scan(ulong cursor, int count = 10, string match = null)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(match))
+                return this.Connection.SendExpectScanResult(Commands.Scan, cursor.ToString().ToByteArray(), Commands.Count, count.ToByteArray());
+
+            return this.Connection.SendExpectScanResult(Commands.Scan, cursor.ToString().ToByteArray(), Commands.Count, count.ToByteArray(), Commands.Match, match.ToByteArray());
+        }
+
+        public byte[][] ScanLoop(int count = 10, string match = null)
+        {
+            var result = new byte[0][];
+            var data = new RedisScanResult(0, null);
+            do
+            {
+                data = this.Scan(data.NextPage, count, match);
+
+                var aux = new byte[result.Length + data.Data.Length][];
+                result.CopyTo(aux, 0);
+                data.Data.CopyTo(aux, result.Length);
+                result = aux;
+            } while (data.NextPage != 0);
+
+            return result;
+        }
+
+        public string[] ScanLoopString(int count = 10, string match = null)
+        {
+            return this.ScanLoop(count, match).ToUtf8Strings();
         }
     }
 }

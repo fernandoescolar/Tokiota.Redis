@@ -1,10 +1,9 @@
-﻿using System;
-using System.ComponentModel;
-using System.Globalization;
-using System.Text;
-
-namespace Tokiota.Redis.Utilities
+﻿namespace Tokiota.Redis.Utilities
 {
+    using System;
+    using System.Globalization;
+    using System.Text;
+
     public static class Extensions
     {
         public static byte[] ToByteArray(this string str)

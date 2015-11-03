@@ -1,7 +1,7 @@
-﻿using Tokiota.Redis.Net;
-
-namespace Tokiota.Redis.Protocol
+﻿namespace Tokiota.Redis.Protocol
 {
+    using Net;
+
     internal class SimpleStringResponseParser : IResponseParser<string>
     {
         public bool CheckExpetedHeader(int byteHeader)

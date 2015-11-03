@@ -1,9 +1,9 @@
-﻿using System;
-using System.IO;
-using System.Text;
-
-namespace Tokiota.Redis.Utilities
+﻿namespace Tokiota.Redis.Utilities
 {
+    using System;
+    using System.IO;
+    using System.Text;
+
     internal sealed class ByteBuffer : IDisposable
     {
         private const int DefaultBufferSize = 2 * 1024 * 1024; //2Mb
@@ -83,7 +83,9 @@ namespace Tokiota.Redis.Utilities
 
         public void Dispose()
         {
-            buffer.Dispose();
+            this.buffer.Dispose();
+            this.writer.Dispose();
+            this.reader.Dispose();
         }
     }
 }

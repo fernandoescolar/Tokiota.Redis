@@ -1,12 +1,12 @@
-﻿using System;
-using System.Security.Claims;
-using System.Security.Principal;
-using System.Web;
-using System.Web.Mvc;
-using System.Web.Routing;
-
-namespace Retwis.Managers
+﻿namespace Retwis.Managers
 {
+    using System;
+    using System.Security.Claims;
+    using System.Security.Principal;
+    using System.Web;
+    using System.Web.Mvc;
+    using System.Web.Routing;
+
     public class RetwisAuthorizeAttribute : AuthorizeAttribute
     {
         private const string AuthCookieName = "retwis-auth";
